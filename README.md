@@ -28,6 +28,9 @@ Run the development app after starting a compatible Kindred Web service:
 pnpm --dir app tauri:dev
 ```
 
+Installation, Local/Remote connection, and the unsigned development-app boundary are documented in
+[`docs/installation.md`](docs/installation.md).
+
 Build the unsigned Apple Silicon development application:
 
 ```sh
@@ -44,4 +47,3 @@ Windows/Linux desktop builds, automatic updates, authentication tunnels, or sema
 
 Licensed under Apache-2.0. Asset-specific provenance is recorded alongside the default visual pack
 and application icon.
-
