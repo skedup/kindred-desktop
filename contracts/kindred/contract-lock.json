@@ -1,0 +1,9 @@
+{
+  "schema": "visual-state/v1.schema.json",
+  "kindred_private_repository": "https://github.com/skedup/kindred-private",
+  "kindred_private_commit": "cb0f5721189978250e6a78be34ea904768ee1239",
+  "kindred_public_repository": "https://github.com/skedup/kindred",
+  "kindred_public_commit": "b7b025b15deba366b10c141a089052ae330180be",
+  "sha256": "4a156e48f7249357e4ad10c02591626c9516bd67a147c58d2a5c2b54f8279db2",
+  "directory_sha256": "da6995648bcd91e4e6f41211c58d102f0d9afb68bcfd7f9131604143bb99cb32"
+}

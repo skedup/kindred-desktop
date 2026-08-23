@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "fps": 6,
+  "enter": [
+    "assets/body/frame1/settle/settle-000.png",
+    "assets/body/frame1/settle/settle-001.png",
+    "assets/body/frame1/settle/settle-002.png"
+  ],
+  "loop": [
+    "assets/body/frame1/settle/settle-003.png",
+    "assets/body/frame1/settle/settle-004.png",
+    "assets/body/frame1/settle/settle-005.png",
+    "assets/body/frame1/settle/settle-006.png",
+    "assets/body/frame1/settle/settle-007.png",
+    "assets/body/frame1/settle/settle-008.png",
+    "assets/body/frame1/settle/settle-009.png",
+    "assets/body/frame1/settle/settle-010.png",
+    "assets/body/frame1/settle/settle-011.png",
+    "assets/body/frame1/settle/settle-012.png",
+    "assets/body/frame1/settle/settle-013.png",
+    "assets/body/frame1/settle/settle-014.png",
+    "assets/body/frame1/settle/settle-015.png",
+    "assets/body/frame1/settle/settle-016.png",
+    "assets/body/frame1/settle/settle-017.png",
+    "assets/body/frame1/settle/settle-000.png",
+    "assets/body/frame1/settle/settle-001.png",
+    "assets/body/frame1/settle/settle-002.png"
+  ]
+}

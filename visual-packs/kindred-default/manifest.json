@@ -1,0 +1,270 @@
+{
+  "schema_version": 1,
+  "id": "kindred-default",
+  "identity": "kindred-resident-v1",
+  "fallback_motion": "neutral",
+  "action_motions": {
+    "change_outfit": "change-outfit",
+    "compose": "compose",
+    "draw": "draw",
+    "eat": "eat",
+    "explore_place": "explore-place",
+    "makeup": "makeup",
+    "pack_bag": "pack-bag",
+    "prepare_food": "prepare-food",
+    "remove_makeup": "remove-makeup",
+    "ride": "ride",
+    "send": "send",
+    "sleep": "sleep",
+    "walk": "walk",
+    "settle": "settle"
+  },
+  "motions": {
+    "neutral": {
+      "renderer": "static",
+      "source": "assets/body/neutral.png",
+      "reduced_motion": {
+        "renderer": "static",
+        "source": "assets/body/neutral.png"
+      }
+    },
+    "change-outfit": {
+      "renderer": "frames",
+      "source": "motions/breathe.json",
+      "fallback_motion": "neutral",
+      "decoration": {
+        "renderer": "static",
+        "source": "assets/decorations/change-outfit.png"
+      },
+      "reduced_motion": {
+        "renderer": "static",
+        "source": "assets/body/neutral.png",
+        "decoration": {
+          "renderer": "static",
+          "source": "assets/decorations/change-outfit.png"
+        }
+      }
+    },
+    "compose": {
+      "renderer": "frames",
+      "source": "motions/breathe.json",
+      "fallback_motion": "neutral",
+      "decoration": {
+        "renderer": "static",
+        "source": "assets/decorations/compose.png"
+      },
+      "reduced_motion": {
+        "renderer": "static",
+        "source": "assets/body/neutral.png",
+        "decoration": {
+          "renderer": "static",
+          "source": "assets/decorations/compose.png"
+        }
+      }
+    },
+    "draw": {
+      "renderer": "frames",
+      "source": "motions/draw.json",
+      "fallback_motion": "neutral",
+      "decoration": {
+        "renderer": "static",
+        "source": "assets/decorations/draw.png"
+      },
+      "reduced_motion": {
+        "renderer": "static",
+        "source": "assets/body/frame2/draw/draw-000.png",
+        "decoration": {
+          "renderer": "static",
+          "source": "assets/decorations/draw.png"
+        }
+      }
+    },
+    "eat": {
+      "renderer": "frames",
+      "source": "motions/eat.json",
+      "fallback_motion": "neutral",
+      "decoration": {
+        "renderer": "static",
+        "source": "assets/decorations/eat.png"
+      },
+      "reduced_motion": {
+        "renderer": "static",
+        "source": "assets/body/neutral.png",
+        "decoration": {
+          "renderer": "static",
+          "source": "assets/decorations/eat.png"
+        }
+      }
+    },
+    "explore-place": {
+      "renderer": "frames",
+      "source": "motions/breathe.json",
+      "fallback_motion": "neutral",
+      "decoration": {
+        "renderer": "static",
+        "source": "assets/decorations/explore-place.png"
+      },
+      "reduced_motion": {
+        "renderer": "static",
+        "source": "assets/body/neutral.png",
+        "decoration": {
+          "renderer": "static",
+          "source": "assets/decorations/explore-place.png"
+        }
+      }
+    },
+    "makeup": {
+      "renderer": "frames",
+      "source": "motions/breathe.json",
+      "fallback_motion": "neutral",
+      "decoration": {
+        "renderer": "static",
+        "source": "assets/decorations/makeup.png"
+      },
+      "reduced_motion": {
+        "renderer": "static",
+        "source": "assets/body/neutral.png",
+        "decoration": {
+          "renderer": "static",
+          "source": "assets/decorations/makeup.png"
+        }
+      }
+    },
+    "pack-bag": {
+      "renderer": "frames",
+      "source": "motions/breathe.json",
+      "fallback_motion": "neutral",
+      "decoration": {
+        "renderer": "static",
+        "source": "assets/decorations/pack-bag.png"
+      },
+      "reduced_motion": {
+        "renderer": "static",
+        "source": "assets/body/neutral.png",
+        "decoration": {
+          "renderer": "static",
+          "source": "assets/decorations/pack-bag.png"
+        }
+      }
+    },
+    "prepare-food": {
+      "renderer": "frames",
+      "source": "motions/breathe.json",
+      "fallback_motion": "neutral",
+      "decoration": {
+        "renderer": "static",
+        "source": "assets/decorations/prepare-food.png"
+      },
+      "reduced_motion": {
+        "renderer": "static",
+        "source": "assets/body/neutral.png",
+        "decoration": {
+          "renderer": "static",
+          "source": "assets/decorations/prepare-food.png"
+        }
+      }
+    },
+    "remove-makeup": {
+      "renderer": "frames",
+      "source": "motions/breathe.json",
+      "fallback_motion": "neutral",
+      "decoration": {
+        "renderer": "static",
+        "source": "assets/decorations/remove-makeup.png"
+      },
+      "reduced_motion": {
+        "renderer": "static",
+        "source": "assets/body/neutral.png",
+        "decoration": {
+          "renderer": "static",
+          "source": "assets/decorations/remove-makeup.png"
+        }
+      }
+    },
+    "ride": {
+      "renderer": "frames",
+      "source": "motions/breathe.json",
+      "fallback_motion": "neutral",
+      "decoration": {
+        "renderer": "static",
+        "source": "assets/decorations/ride.png"
+      },
+      "reduced_motion": {
+        "renderer": "static",
+        "source": "assets/body/neutral.png",
+        "decoration": {
+          "renderer": "static",
+          "source": "assets/decorations/ride.png"
+        }
+      }
+    },
+    "send": {
+      "renderer": "frames",
+      "source": "motions/breathe.json",
+      "fallback_motion": "neutral",
+      "decoration": {
+        "renderer": "static",
+        "source": "assets/decorations/send.png"
+      },
+      "reduced_motion": {
+        "renderer": "static",
+        "source": "assets/body/neutral.png",
+        "decoration": {
+          "renderer": "static",
+          "source": "assets/decorations/send.png"
+        }
+      }
+    },
+    "sleep": {
+      "renderer": "frames",
+      "source": "motions/sleep.json",
+      "fallback_motion": "neutral",
+      "decoration": {
+        "renderer": "static",
+        "source": "assets/decorations/sleep.png"
+      },
+      "reduced_motion": {
+        "renderer": "static",
+        "source": "assets/body/neutral.png",
+        "decoration": {
+          "renderer": "static",
+          "source": "assets/decorations/sleep.png"
+        }
+      }
+    },
+    "walk": {
+      "renderer": "frames",
+      "source": "motions/breathe.json",
+      "fallback_motion": "neutral",
+      "decoration": {
+        "renderer": "static",
+        "source": "assets/decorations/walk.png"
+      },
+      "reduced_motion": {
+        "renderer": "static",
+        "source": "assets/body/neutral.png",
+        "decoration": {
+          "renderer": "static",
+          "source": "assets/decorations/walk.png"
+        }
+      }
+    },
+    "settle": {
+      "renderer": "frames",
+      "source": "motions/settle.json",
+      "fallback_motion": "neutral",
+      "decoration": {
+        "renderer": "static",
+        "source": "assets/decorations/settle.png"
+      },
+      "reduced_motion": {
+        "renderer": "static",
+        "source": "assets/body/neutral.png",
+        "decoration": {
+          "renderer": "static",
+          "source": "assets/decorations/settle.png"
+        }
+      }
+    }
+  }
+}

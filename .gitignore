@@ -1,0 +1,11 @@
+.DS_Store
+.pytest_cache/
+.ruff_cache/
+.venv/
+__pycache__/
+*.py[cod]
+app/dist/
+app/node_modules/
+app/src-tauri/target/
+app/tsconfig.tsbuildinfo
+

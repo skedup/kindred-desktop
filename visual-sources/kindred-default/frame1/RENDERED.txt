@@ -1,0 +1,5 @@
+fps=6
+size=512x768
+settle=18
+sleep=24
+eat=12

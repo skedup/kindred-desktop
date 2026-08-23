@@ -1,0 +1,193 @@
+{
+  "canvas": {
+    "height": 1536,
+    "width": 1024
+  },
+  "contract": "frame2-draw-layers-v5",
+  "layers": [
+    {
+      "file": "generated/00-hidden-underlay.png",
+      "name": "hidden_underlay",
+      "order": 0,
+      "partition_member": false,
+      "render_in_rig": false,
+      "role": "repair_source",
+      "visible_in_neutral": false
+    },
+    {
+      "file": "generated/10-fixed-props.png",
+      "name": "fixed_props",
+      "order": 10,
+      "partition_member": true,
+      "render_in_rig": true,
+      "role": "fixed_props",
+      "visible_in_neutral": true
+    },
+    {
+      "file": "generated/11-canvas-underlay.png",
+      "name": "canvas_underlay",
+      "order": 11,
+      "partition_member": false,
+      "render_in_rig": true,
+      "role": "fixed_canvas_repair",
+      "visible_in_neutral": true
+    },
+    {
+      "file": "generated/18-character-surface.png",
+      "name": "character_surface",
+      "order": 18,
+      "partition_member": false,
+      "render_in_rig": true,
+      "role": "continuous_character_surface",
+      "visible_in_neutral": true
+    },
+    {
+      "file": "generated/20-body-base.png",
+      "name": "body_base",
+      "order": 20,
+      "partition_member": true,
+      "render_in_rig": false,
+      "role": "character_surface_source",
+      "visible_in_neutral": false
+    },
+    {
+      "file": "generated/30-hair-back.png",
+      "name": "hair_back",
+      "order": 30,
+      "partition_member": true,
+      "pivot": [
+        420,
+        350
+      ],
+      "render_in_rig": true,
+      "role": "head_follow",
+      "visible_in_neutral": true
+    },
+    {
+      "file": "generated/35-head-underlay.png",
+      "name": "head_underlay",
+      "order": 35,
+      "partition_member": false,
+      "pivot": [
+        420,
+        350
+      ],
+      "render_in_rig": true,
+      "role": "head_follow_repair",
+      "visible_in_neutral": true
+    },
+    {
+      "file": "generated/40-head-face.png",
+      "name": "head_face",
+      "order": 40,
+      "partition_member": true,
+      "pivot": [
+        420,
+        350
+      ],
+      "render_in_rig": true,
+      "role": "head",
+      "visible_in_neutral": true
+    },
+    {
+      "file": "generated/50-eyes-closed.png",
+      "name": "eyes_closed",
+      "order": 50,
+      "partition_member": false,
+      "pivot": [
+        420,
+        350
+      ],
+      "render_in_rig": true,
+      "role": "blink_closed",
+      "visible_in_neutral": false
+    },
+    {
+      "file": "generated/51-eyes-open.png",
+      "name": "eyes_open",
+      "order": 51,
+      "partition_member": true,
+      "pivot": [
+        420,
+        350
+      ],
+      "render_in_rig": true,
+      "role": "blink_open",
+      "visible_in_neutral": true
+    },
+    {
+      "file": "generated/60-hair-front.png",
+      "name": "hair_front",
+      "order": 60,
+      "partition_member": true,
+      "pivot": [
+        420,
+        350
+      ],
+      "render_in_rig": true,
+      "role": "head_follow",
+      "visible_in_neutral": true
+    },
+    {
+      "file": "generated/64-support-sleeve.png",
+      "name": "support_sleeve",
+      "order": 64,
+      "partition_member": true,
+      "render_in_rig": false,
+      "role": "character_surface_source",
+      "visible_in_neutral": false
+    },
+    {
+      "file": "generated/65-draw-sleeve.png",
+      "name": "draw_sleeve",
+      "order": 65,
+      "partition_member": true,
+      "render_in_rig": false,
+      "role": "character_surface_source",
+      "visible_in_neutral": false
+    },
+    {
+      "file": "generated/66-palette.png",
+      "name": "palette",
+      "order": 66,
+      "partition_member": true,
+      "render_in_rig": false,
+      "role": "character_surface_source",
+      "visible_in_neutral": false
+    },
+    {
+      "file": "generated/67-support-arm.png",
+      "name": "support_arm",
+      "order": 67,
+      "partition_member": true,
+      "render_in_rig": false,
+      "role": "character_surface_source",
+      "visible_in_neutral": false
+    },
+    {
+      "file": "generated/70-draw-arm.png",
+      "name": "draw_arm",
+      "order": 70,
+      "partition_member": true,
+      "render_in_rig": false,
+      "role": "character_surface_source",
+      "visible_in_neutral": false
+    },
+    {
+      "file": "generated/71-brush.png",
+      "name": "brush",
+      "order": 71,
+      "partition_member": true,
+      "pivot": [
+        565,
+        405
+      ],
+      "render_in_rig": true,
+      "role": "draw_stroke",
+      "visible_in_neutral": true
+    }
+  ],
+  "parent_contract": "frame2-draw-v2",
+  "runtime_renderer": "frames",
+  "schema_version": 1
+}

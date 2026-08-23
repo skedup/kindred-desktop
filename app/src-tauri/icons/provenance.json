@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "assets": [
+    "icon.icns",
+    "icon.png"
+  ],
+  "public_license": "Apache-2.0",
+  "source": "contributor-supplied AI-assisted moonlit silhouette artwork",
+  "generator": "OpenAI Playground image generation (contributor-reported)",
+  "reported_generated_on": "2026-08-19",
+  "attestation": "Contributor reports that the artwork was generated for Kindred with identifying character marks intentionally removed.",
+  "postprocess": "Current master is a 1024 px square RGBA asset with no baked platform mask; contributor reports that the supplied 1250 by 1258 px artwork was center-cropped, and the ICNS was derived during project packaging.",
+  "rights_basis": "Contributor attests that the supplied AI-assisted artwork was created for and licensed to the Kindred project."
+}

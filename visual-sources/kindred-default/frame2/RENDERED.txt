@@ -1,0 +1,5 @@
+contract=frame2-draw-v2
+layer_contract=frame2-draw-layers-v5
+fps=6
+size=512x768
+draw=24

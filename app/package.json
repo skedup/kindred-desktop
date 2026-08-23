@@ -1,0 +1,41 @@
+{
+  "name": "kindred-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "license": "Apache-2.0",
+  "type": "module",
+  "description": "Read-only ambient macOS desktop presence for Kindred",
+  "packageManager": "pnpm@11.7.0",
+  "engines": {
+    "node": "22.18.0"
+  },
+  "scripts": {
+    "dev": "vite --port 1420 --strictPort",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview",
+    "tauri": "tauri",
+    "tauri:dev": "tauri dev",
+    "tauri:build:host": "tauri build -- --locked",
+    "tauri:build:macos-arm64": "tauri build --ci --target aarch64-apple-darwin --no-bundle -- --locked",
+    "tauri:bundle:macos-arm64": "tauri build --ci --target aarch64-apple-darwin --bundles app --no-sign -- --locked",
+    "bundle:validate": "python3 ../scripts/validate_desktop_bundle.py --app 'src-tauri/target/aarch64-apple-darwin/release/bundle/macos/Kindred Desktop Spirit.app'",
+    "bundle:macos-arm64": "pnpm tauri:bundle:macos-arm64 && pnpm bundle:validate",
+    "typecheck": "vue-tsc --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.11.1",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.11.4",
+    "@types/node": "^22.19.21",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "jsdom": "^29.1.1",
+    "typescript": "~5.7.2",
+    "vite": "^6.0.7",
+    "vitest": "^2.1.9",
+    "vue-tsc": "^2.2.0"
+  }
+}
+

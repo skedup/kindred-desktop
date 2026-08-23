@@ -1,0 +1,15 @@
+# FRAME2E is an inspectable production source, but local prompt experiments,
+# superseded frame sequences, audit images, previews, and Blender backups are
+# intentionally not repository artifacts. Keep this as an explicit allowlist.
+*
+!*/
+!/.gitignore
+!/README.md
+!/RENDERED.txt
+!/frame2e-layered-draw-rig.blend
+!/frames/scene-warp-v5/motion-*.png
+!/keys/stable-alpha/key-00.png
+!/layers/draw-static-props-alpha-v1.png
+!/layers/draw-static-props-visible-mask-v1.png
+!/layers/generated/draw-character-focused-alpha-v2.png
+!/layers/generated/draw-brush-alpha-v1.png

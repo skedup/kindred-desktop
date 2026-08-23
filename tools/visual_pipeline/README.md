@@ -1,0 +1,74 @@
+# Desktop visual pipeline
+
+This package owns offline production and validation for Kindred desktop-spirit
+frame assets. It is developer tooling: the shipped desktop runtime consumes
+only visual-pack manifests and rendered PNG files, and never imports Blender or
+these Python modules.
+
+## Responsibilities
+
+- `standing_generate.py` renders the standing `settle`, `eat`, and `sleep`
+  motion set through Blender and FFmpeg.
+- `standing_validate.py` enforces that standing motion set's frame geometry,
+  schedule, blink locality, and baseline contract.
+- `draw_contract.py` defines the geometry used by the earlier FRAME2 layered
+  authoring path.
+- `draw_layers_build.py` deterministically partitions the reviewed `draw` key
+  into FRAME2-B2a-R1 provenance layers and builds the lossless continuous
+  character surface used for rendering.
+- `draw_layers_validate.py` enforces layer inventory, lossless visible-pixel
+  partitioning, byte-for-byte provenance from the reviewed key/repair plates,
+  repair-underlay overlap, and localized eye-state contracts.
+- `draw_generate.py` retains the earlier FRAME2 continuous-surface authoring
+  path for comparison and source inspection.
+- `draw_validate.py` retains the corresponding earlier FRAME2 validator.
+- `draw_layered_generate.py` renders the production FRAME2E loop with a
+  byte-stable chair/easel plate, one seamless character surface, and a rigid
+  brush. The seated contact is anchored while the torso, painting arm, and
+  crossed legs move; a full-loop visible-prop semantic mask is regenerated.
+- `draw_layered_contract.py` owns the dependency-free 84-frame / 12 FPS timing
+  contract shared by Blender authoring, tests, promotion, and validation.
+- `draw_layered_promote.py` verifies the pinned approval manifest, stages the
+  reviewed FRAME2E loop, and transactionally replaces the bundled runtime plus
+  its 12 FPS motion manifest with rollback on failure.
+- `draw_layered_validate.py` verifies source inventory, loop closure, exact
+  ordered source/runtime digests, the full reviewed visible-prop mask,
+  transparent corners, visible hand/body/leg motion, rigid chest and inner
+  shoulder behavior, and exact source-to-runtime parity.
+- `png_rgba.py` contains the dependency-free PNG reader shared by validators.
+- `blender_canvas.py` owns the transparent scene, orthographic canvas, mesh,
+  material, and texture primitives shared by Blender generators.
+
+The top-level `scripts/` directory remains reserved for independent repository,
+release, deployment, CI, and diagnostic commands rather than animation-domain
+implementation.
+
+## Validation
+
+```bash
+python -m tools.visual_pipeline.standing_validate
+python -m tools.visual_pipeline.draw_layered_validate
+```
+
+## Rendering
+
+Run the generators through Blender 5.2 LTS:
+
+```bash
+Blender --background --python tools/visual_pipeline/standing_generate.py -- \
+  --repository-root "$PWD"
+
+python -m tools.visual_pipeline.draw_layers_build --repository-root "$PWD"
+
+Blender --background --python tools/visual_pipeline/draw_generate.py -- \
+  --repository-root "$PWD"
+
+Blender --background --python tools/visual_pipeline/draw_layered_generate.py -- \
+  --repository-root "$PWD"
+
+python -m tools.visual_pipeline.draw_layered_promote \
+  --repository-root "$PWD"
+
+python -m tools.visual_pipeline.draw_layered_validate \
+  --source-root visual-sources/kindred-default/frame2e
+```

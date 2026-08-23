@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "fps": 6,
+  "enter": [
+    "assets/body/frame1/sleep/sleep-000.png",
+    "assets/body/frame1/sleep/sleep-001.png",
+    "assets/body/frame1/sleep/sleep-002.png",
+    "assets/body/frame1/sleep/sleep-003.png"
+  ],
+  "loop": [
+    "assets/body/frame1/sleep/sleep-004.png",
+    "assets/body/frame1/sleep/sleep-005.png",
+    "assets/body/frame1/sleep/sleep-006.png",
+    "assets/body/frame1/sleep/sleep-007.png",
+    "assets/body/frame1/sleep/sleep-008.png",
+    "assets/body/frame1/sleep/sleep-009.png",
+    "assets/body/frame1/sleep/sleep-010.png",
+    "assets/body/frame1/sleep/sleep-011.png",
+    "assets/body/frame1/sleep/sleep-012.png",
+    "assets/body/frame1/sleep/sleep-013.png",
+    "assets/body/frame1/sleep/sleep-014.png",
+    "assets/body/frame1/sleep/sleep-015.png",
+    "assets/body/frame1/sleep/sleep-016.png",
+    "assets/body/frame1/sleep/sleep-017.png",
+    "assets/body/frame1/sleep/sleep-018.png",
+    "assets/body/frame1/sleep/sleep-019.png",
+    "assets/body/frame1/sleep/sleep-020.png",
+    "assets/body/frame1/sleep/sleep-021.png",
+    "assets/body/frame1/sleep/sleep-022.png",
+    "assets/body/frame1/sleep/sleep-023.png",
+    "assets/body/frame1/sleep/sleep-000.png",
+    "assets/body/frame1/sleep/sleep-001.png",
+    "assets/body/frame1/sleep/sleep-002.png",
+    "assets/body/frame1/sleep/sleep-003.png"
+  ]
+}

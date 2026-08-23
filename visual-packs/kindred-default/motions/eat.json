@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "fps": 6,
+  "enter": [
+    "assets/body/frame1/eat/eat-000.png",
+    "assets/body/frame1/eat/eat-001.png",
+    "assets/body/frame1/eat/eat-002.png"
+  ],
+  "loop": [
+    "assets/body/frame1/eat/eat-003.png",
+    "assets/body/frame1/eat/eat-004.png",
+    "assets/body/frame1/eat/eat-005.png",
+    "assets/body/frame1/eat/eat-006.png",
+    "assets/body/frame1/eat/eat-007.png",
+    "assets/body/frame1/eat/eat-008.png",
+    "assets/body/frame1/eat/eat-009.png",
+    "assets/body/frame1/eat/eat-010.png",
+    "assets/body/frame1/eat/eat-011.png",
+    "assets/body/frame1/eat/eat-000.png",
+    "assets/body/frame1/eat/eat-001.png",
+    "assets/body/frame1/eat/eat-002.png"
+  ]
+}
