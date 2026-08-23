@@ -19,8 +19,9 @@ This directory is the non-runtime source of the `settle`, `sleep`, and `eat` fra
 - Krita 5.3.3 is the manual cleanup fallback for face, hands, occlusion, and alpha-edge defects;
   the current reviewed keys did not require a destructive manual repaint.
 
-The full motion briefs and prompts live in
-[`docs/discussions/2026-08-20-frame-animation-production.md`](../../../../docs/discussions/2026-08-20-frame-animation-production.md).
+The reproducible animation workflow is documented in the
+[visual-pipeline README](../../../tools/visual_pipeline/README.md); production decisions remain available in this
+repository's history.
 
 ## Rebuild
 
