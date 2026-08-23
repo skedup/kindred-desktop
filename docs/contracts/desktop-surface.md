@@ -1,8 +1,8 @@
 # macOS 桌面精灵宿主合同
 
 > **状态**：`current / V1 contract baseline`；设计依据见
-> [桌面精灵可视化](./2026-08-16-desktop-spirit-visualization.md)，实施状态只在
-> [DSV 计划](../plans/2026-08-16-desktop-spirit-visualization-plan.md)维护。
+> [桌面精灵可视化](./desktop-visualization.md)，实施与发布状态以
+> [仓库 README](../../README.md) 和本仓库 CI 为准。
 
 ## Purpose
 

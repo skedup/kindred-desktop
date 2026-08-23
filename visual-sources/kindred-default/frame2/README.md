@@ -70,5 +70,6 @@ python -m tools.visual_pipeline.draw_validate
 python scripts/validate_visual_pack.py visual-packs/kindred-default
 ```
 
-The source brief, acceptance criteria, and remaining production work live in
-[`docs/discussions/2026-08-20-frame2-layered-draw-production.md`](../../../../docs/discussions/2026-08-20-frame2-layered-draw-production.md).
+The reproducible animation workflow is documented in the
+[visual-pipeline README](../../../tools/visual_pipeline/README.md); production decisions remain available in this
+repository's history.

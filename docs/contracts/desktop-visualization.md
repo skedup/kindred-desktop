@@ -1,18 +1,18 @@
 # 桌面精灵可视化：观察型常驻身体与交互边界
 
-> **状态**：`current / design frozen`；第一阶段 DSV1~DSV2 已实现，正在
-> [GitHub PR #62](https://github.com/skedup/kindred-private/pull/62) 评审。
+> **状态**：`current / standalone repository baseline`；桌面宿主、视觉渲染与默认视觉包
+> 已由本仓库独立维护。
 >
 > **需求与进度权威**：
-> [桌面精灵可视化实施计划](../plans/2026-08-16-desktop-spirit-visualization-plan.md)。
-> 本文只记录背景、取舍与设计结论，不维护第二份完成状态。
+> 本文记录背景、取舍与设计结论；当前实施、构建与发布状态以
+> [仓库 README](../../README.md) 和本仓库 CI 为准。
 >
 > **合同基线**：
-> [视觉呈现合同](./2026-08-16-spirit-visual-presence-contract.md)；
-> [macOS 桌面宿主合同](./2026-08-16-desktop-spirit-surface-contract.md)。
+> [视觉呈现合同](./visual-presence.md)；
+> [macOS 桌面宿主合同](./desktop-surface.md)。
 >
 > **长期渲染方向**：
-> [Live2D / 逐帧渲染调研与混合路线](./2026-08-18-live2d-frame-renderer-research.md)。
+> 首版继续使用静态图与逐帧动画；Live2D 保持为独立的后续设计方向。
 
 ## 0. 结论
 
@@ -307,8 +307,7 @@ Direct commands that overwrite a resident's action or interior state, and render
 2. Add the desktop-only TypeScript renderer, validated bundled default pack with local action decoration, and deterministic visual fixtures. Existing browser Web routes remain unchanged.
 3. Add the narrow snapshot-polling Tauri transport and minimal macOS desktop host while collecting Local and direct-Remote performance evidence.
 4. Update macOS install/release assembly and document both all-local and direct Ubuntu-service-host deployment. Desktop installation does not install or manage Heart or Web services.
-5. Leave the Live2D adapter to a separate future change after the
-   [hybrid-renderer research gates](./2026-08-18-live2d-frame-renderer-research.md) for runtime licensing,
+5. Leave the Live2D adapter to a separate future change after the hybrid-renderer research gates for runtime licensing,
    model packaging, session lifecycle, three-action quality, and resource ceilings pass review.
 
 The view-definition repair is applied by the existing idempotent schema migration and rewrites no tick data; all server/API changes are additive. Because no production environment exists, only the current v7 binary/schema combination is supported and binary downgrade compatibility is not implemented. Removing or disabling the desktop application leaves canonical resident data and the existing Web observation pages readable under the current binary.
@@ -318,7 +317,7 @@ The view-definition repair is applied by the existing idempotent schema migratio
 - Which minimal original character assets will seed the default static/frame visual pack? The pack contract and fallback requirements do not depend on the final art direction.
 - What future input vocabulary and wake-up latency should qualify as semantic interaction rather than non-character input feedback? This does not block the observation-only release.
 - Will Live2D confirm in writing that Kindred's fixed single-model, no-import AI desktop application is not an
-  Expandable Application, and which D-plan notice / Logo / Showcase terms apply? The
-  [renderer research](./2026-08-18-live2d-frame-renderer-research.md) records the current free-plan working
-  assumption, but the optional adapter remains out of the default critical path until this release gate is resolved.
+  Expandable Application, and which D-plan notice / Logo / Showcase terms apply? The current free-plan working
+  assumption remains provisional, and the optional adapter stays out of the default critical path until this release
+  gate is resolved.
 - Should a later remote-access change add native authenticated HTTPS or continue treating confidentiality and server authentication as deployment infrastructure? V1 deliberately uses direct operator-configured HTTP/HTTPS without application credentials.
