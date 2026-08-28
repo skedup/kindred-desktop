@@ -41,16 +41,25 @@
       "paths": [
         "assets/body/frame1/settle/*.png",
         "assets/body/frame1/sleep/*.png",
-        "assets/body/frame1/eat/*.png",
         "motions/settle.json",
-        "motions/sleep.json",
-        "motions/eat.json"
+        "motions/sleep.json"
       ],
       "source": "controlled action key poses derived from Kindred first-party artwork without third-party image inputs",
       "generator": "OpenAI built-in image generation for reviewed key poses; Blender 5.2 LTS deterministic 2D mesh warp for runtime frames",
       "generated_on": "2026-08-20",
       "postprocess": "FFmpeg chroma-key, despill, and neutral-locked localized eye compositing; fixed-canvas Blender deformation; 512x768 RGBA PNG export; and frame-by-frame visual QA",
       "rights_basis": "created for Kindred from project-owned first-party character artwork and released under the pack public license"
+    },
+    {
+      "paths": [
+        "assets/body/eat-v2/*.png",
+        "motions/eat.json"
+      ],
+      "source": "reviewed original Kindred character identity and seated breakfast pose, separated into a complete character surface, fixed chair and breakfast-table plates, and a rigid spoon",
+      "generator": "OpenAI built-in image generation for the reviewed first-party source pose and localized plate edits; Blender 5.2 LTS deterministic continuous-surface deformation for runtime frames",
+      "generated_on": "2026-08-28",
+      "postprocess": "flat chroma-key removal and despill; deterministic fixed-prop, continuous-character, and rigid-spoon separation; bounded below-arm-band sleeve motion; rigid upper-body translation; bowl-contact hand stabilization; byte-stable visible-prop compositing; centered 17px runtime table gutters aligned to the desktop status card; deterministic 512x768 RGBA export; and exact source-to-runtime promotion at 12 FPS",
+      "rights_basis": "created for Kindred from project-owned first-party character artwork and project-controlled pose references; no third-party character or production-frame input"
     },
     {
       "paths": [

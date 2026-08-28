@@ -1,0 +1,93 @@
+{
+  "contract": "eat-v2-layers-v1",
+  "counts": {
+    "character_authority": 436792,
+    "fixed_authority": 532022,
+    "foreground": 368880,
+    "foreground_visible_mask": 368880,
+    "master_visible": 975008,
+    "rear_visible_mask": 96644,
+    "spoon": 8336
+  },
+  "internal_character_replays": [
+    "support_hand",
+    "grip"
+  ],
+  "layers": {
+    "character": {
+      "file": "layers/character/character-surface.png",
+      "sha256_file": "4acd0ceaca8e08bc9193589463b4e5ae0110125f2b452313b39d6a08e64d1cc9",
+      "sha256_rgba": "a0f2aafff362b95017bd6535a6f2ad382ac8fabfbe99f11a1a84f98a45e6e520"
+    },
+    "character_visible_mask": {
+      "file": "layers/validation-masks/character-visible-mask.png",
+      "sha256_file": "539fcc7e72889a9812032fd837b189d95a61f17b6a6d3a5141be4e8f56118cfa",
+      "sha256_rgba": "ddf974ffde3805c914bbf99b15abeec846018855fa3ee800fea27470c5a82216"
+    },
+    "foreground": {
+      "file": "layers/foreground-occluder/foreground-occluder.png",
+      "sha256_file": "a19fdda7736edca251c53c0616362c463a89a47ef66b73fe0d395519a0df7e84",
+      "sha256_rgba": "4850a1e6fcbc93fac0f71912caa1698ff1a2d2a752e07258d6df871afdf43648"
+    },
+    "foreground_visible_mask": {
+      "file": "layers/validation-masks/foreground-visible-mask.png",
+      "sha256_file": "5654df06eb8741d8c3d17e33c6548b03e1190ee13599fea8d791d6d90cd59dc4",
+      "sha256_rgba": "5322c8d24d2b4f4c3c08b5f89cef4f19d6e4fb555383758025bbbe7e713047cc"
+    },
+    "rear_static": {
+      "file": "layers/rear-static/rear-static.png",
+      "sha256_file": "de2f394dea5220b9a215b7fe97e2061f69623fc2a38391de1709965b69177605",
+      "sha256_rgba": "cc25c6ad889a174f371341f3869493a1756fdea6955633e26114a28bd1523aac"
+    },
+    "rear_visible_mask": {
+      "file": "layers/validation-masks/rear-static-visible-mask.png",
+      "sha256_file": "1bf9dcaccc3370c7b461d5f95e222ebab1ed6ed76f370e30fdea59fc74d5fd29",
+      "sha256_rgba": "2c67dcb6501dbe0abff5cdb23855c12f9001b40b833616ea57b22ede6e443ae9"
+    },
+    "spoon": {
+      "file": "layers/spoon/spoon.png",
+      "sha256_file": "5c361fe1d4cb0853fe6a1b8f9773d26732a4eed17fd048c5466b3f5e3c51352d",
+      "sha256_rgba": "741875eae90f87ae1b8503d4b8e8d8cfde25828067142f0ec5d2a2e47eac789f"
+    },
+    "spoon_mask": {
+      "file": "layers/validation-masks/spoon-semantic-mask.png",
+      "sha256_file": "63df7a801a655274d34443573cc4953f418168a4e4b11b3e1859533464f0268b",
+      "sha256_rgba": "e4895d166108e04ddde955833765f4f3ce201427750809c52e14b089c1d2b859"
+    }
+  },
+  "order": [
+    "rear_static",
+    "character",
+    "spoon",
+    "foreground"
+  ],
+  "recomposed_changed_pixels": 1146085,
+  "recomposed_missing_visible_pixels": 27864,
+  "recomposed_unexpected_visible_pixels": 1254,
+  "size": [
+    1024,
+    1536
+  ],
+  "sources": {
+    "character_clean": {
+      "file": "layers/plates/character-clean.png",
+      "sha256_file": "3a528fcf32e69f0707ce8e81e3c20e859c423fd35b6eab99d49d232703c3d22a"
+    },
+    "fixed_props_clean": {
+      "file": "layers/plates/fixed-props-clean.png",
+      "sha256_file": "6feca8aaedbf0e2f5af81732eb5b7b5c4f87d3b6f349ce3b1e4f602812f32568"
+    },
+    "master": {
+      "file": "keys/eat-master.png",
+      "sha256_file": "8ec3530d93e0afbc47b843a07de4091236801a17d01b6704691696bc5cee9edf"
+    },
+    "recomposed_preview": {
+      "file": "previews/eat-master-recomposed.png",
+      "sha256_file": "36b65fdb5030b775093b1f5172fd6e31b0dba822f327aa787b8fcbd4fb6d60a6"
+    },
+    "spoon_complete": {
+      "file": "layers/plates/spoon-complete.png",
+      "sha256_file": "5c361fe1d4cb0853fe6a1b8f9773d26732a4eed17fd048c5466b3f5e3c51352d"
+    }
+  }
+}

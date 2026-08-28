@@ -89,7 +89,7 @@
       },
       "reduced_motion": {
         "renderer": "static",
-        "source": "assets/body/neutral.png",
+        "source": "assets/body/eat-v2/eat-000.png",
         "decoration": {
           "renderer": "static",
           "source": "assets/decorations/eat.png"
