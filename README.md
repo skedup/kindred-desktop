@@ -40,6 +40,10 @@ pnpm --dir app bundle:macos-arm64
 The visual production sources and commands are documented in
 [`tools/visual_pipeline/README.md`](tools/visual_pipeline/README.md).
 
+Active visual work keeps its reasoning and execution steps separate. The current `eat` redesign is
+recorded in the [design discussion](docs/discussions/2026-08-27-eat-frame-animation-design.md) and
+[implementation plan](docs/plans/2026-08-27-eat-frame-animation-plan.md).
+
 ## Scope
 
 The first release supports Apple Silicon macOS only. It intentionally does not include Live2D,

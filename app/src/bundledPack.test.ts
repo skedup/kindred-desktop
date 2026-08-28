@@ -42,7 +42,7 @@ describe('bundled desktop visual pack', () => {
     }
   })
 
-  it('ships action-specific body motion for the FRAME1 vertical slice', () => {
+  it('ships action-specific body motion for bundled frame animations', () => {
     const { manifest } = resolveBundledVisualPack()
     expect(manifest.motions[manifest.action_motions.settle]?.source).toBe('motions/settle.json')
     expect(manifest.motions[manifest.action_motions.sleep]?.source).toBe('motions/sleep.json')
