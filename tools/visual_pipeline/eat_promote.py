@@ -11,7 +11,7 @@ import shutil
 import sys
 import tempfile
 import uuid
-from collections.abc import Sequence
+from collections.abc import Callable, Sequence
 from pathlib import Path
 
 from tools.visual_pipeline.eat_contract import (
@@ -22,11 +22,14 @@ from tools.visual_pipeline.eat_contract import (
     FRAME_DIRECTORY,
     FRAME_PREFIX,
     REAR_LAYER,
+    RUNTIME_FRAME_SUFFIX,
     RUNTIME_SIZE,
+    SOURCE_FRAME_SUFFIX,
     SOURCE_ROOT,
     SPOON_LAYER,
 )
 from tools.visual_pipeline.png_rgba import source_rgba
+from tools.visual_pipeline.webp_rgba import webp_rgba, write_lossless_webp
 
 RUNTIME_DIRECTORY = Path("visual-packs/kindred-default/assets/body/eat-v2")
 LEGACY_RUNTIME_DIRECTORY = Path("visual-packs/kindred-default/assets/body/frame1/eat")
@@ -71,8 +74,9 @@ def expected_frame_paths(
     *,
     prefix: str,
     frame_count: int = FRAME_COUNT,
+    suffix: str = SOURCE_FRAME_SUFFIX,
 ) -> list[Path]:
-    return [directory / f"{prefix}-{index:03d}.png" for index in range(frame_count)]
+    return [directory / f"{prefix}-{index:03d}{suffix}" for index in range(frame_count)]
 
 
 def require_exact_inventory(
@@ -80,9 +84,15 @@ def require_exact_inventory(
     *,
     prefix: str,
     frame_count: int = FRAME_COUNT,
+    suffix: str = SOURCE_FRAME_SUFFIX,
 ) -> list[Path]:
-    expected = expected_frame_paths(directory, prefix=prefix, frame_count=frame_count)
-    actual = sorted(directory.glob("*.png"))
+    expected = expected_frame_paths(
+        directory,
+        prefix=prefix,
+        frame_count=frame_count,
+        suffix=suffix,
+    )
+    actual = sorted(directory.iterdir()) if directory.exists() else []
     if actual != expected:
         raise SystemExit(f"{prefix}_inventory_invalid:expected={frame_count}:actual={len(actual)}")
     return expected
@@ -92,14 +102,15 @@ def ordered_frames_digest(
     paths: Sequence[Path],
     *,
     names: Sequence[str] | None = None,
+    loader: Callable[[Path], bytes] | None = None,
 ) -> str:
-    """Hash an ordered frame set, including each reviewed filename."""
+    """Hash ordered frame payloads, including each reviewed filename."""
 
     if names is not None and len(paths) != len(names):
         raise ValueError("ordered frame names must match the path count")
     digest = hashlib.sha256()
     for index, path in enumerate(paths):
-        payload = path.read_bytes()
+        payload = path.read_bytes() if loader is None else loader(path)
         name = path.name if names is None else names[index]
         digest.update(name.encode("utf-8"))
         digest.update(b"\0")
@@ -154,7 +165,8 @@ def validate_approval(
         "source_frames_sha256": ordered_frames_digest(source_paths),
         "runtime_frames_sha256": ordered_frames_digest(
             source_paths,
-            names=[f"eat-{index:03d}.png" for index in range(frame_count)],
+            names=[f"eat-{index:03d}{RUNTIME_FRAME_SUFFIX}" for index in range(frame_count)],
+            loader=lambda path: source_rgba(path, size=RUNTIME_SIZE),
         ),
     }
     for key, expected in expected_values.items():
@@ -170,7 +182,10 @@ def motion_payload(*, frame_count: int = FRAME_COUNT) -> dict[str, object]:
         "schema_version": 1,
         "fps": FPS,
         "enter": [],
-        "loop": [f"assets/body/eat-v2/eat-{index:03d}.png" for index in range(frame_count)],
+        "loop": [
+            f"assets/body/eat-v2/eat-{index:03d}{RUNTIME_FRAME_SUFFIX}"
+            for index in range(frame_count)
+        ],
     }
 
 
@@ -220,15 +235,21 @@ def promote(repository: Path, *, frame_count: int = FRAME_COUNT) -> None:
     promotion_succeeded = False
     try:
         for index, source in enumerate(expected_sources):
-            destination = staged_directory / f"eat-{index:03d}.png"
-            shutil.copyfile(source, destination)
-            source_rgba(destination, size=RUNTIME_SIZE)
+            destination = staged_directory / f"eat-{index:03d}{RUNTIME_FRAME_SUFFIX}"
+            source_pixels = source_rgba(source, size=RUNTIME_SIZE)
+            write_lossless_webp(destination, size=RUNTIME_SIZE, pixels=source_pixels)
+            if webp_rgba(destination, size=RUNTIME_SIZE) != source_pixels:
+                raise SystemExit(f"staged_runtime_pixel_mismatch:{index}")
         staged_paths = require_exact_inventory(
             staged_directory,
             prefix="eat",
             frame_count=frame_count,
+            suffix=RUNTIME_FRAME_SUFFIX,
         )
-        if ordered_frames_digest(staged_paths) != approval["runtime_frames_sha256"]:
+        if (
+            ordered_frames_digest(staged_paths, loader=webp_rgba)
+            != approval["runtime_frames_sha256"]
+        ):
             raise SystemExit("staged_runtime_digest_mismatch")
         _write_staged_manifest(staged_manifest, frame_count=frame_count)
 
@@ -243,12 +264,13 @@ def promote(repository: Path, *, frame_count: int = FRAME_COUNT) -> None:
             runtime_directory,
             prefix="eat",
             frame_count=frame_count,
+            suffix=RUNTIME_FRAME_SUFFIX,
         )
         if any(
-            source.read_bytes() != runtime.read_bytes()
+            source_rgba(source, size=RUNTIME_SIZE) != webp_rgba(runtime, size=RUNTIME_SIZE)
             for source, runtime in zip(expected_sources, runtime_paths, strict=True)
         ):
-            raise SystemExit("promoted_runtime_differs_from_source")
+            raise SystemExit("promoted_runtime_pixels_differ_from_source")
         if json.loads(motion_manifest.read_text(encoding="utf-8")) != motion_payload(
             frame_count=frame_count
         ):

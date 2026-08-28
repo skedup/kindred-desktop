@@ -64,8 +64,8 @@
   - [x] 勺子使用批准的刚性源层，并覆盖“碗—嘴—返回”行程；
   - [x] source 批准清单完整。
 - [x] 新增事务性 `eat_promote.py`。
-- [x] promotion 后逐帧比较 source/runtime SHA-256。
-- [x] 更新 `motions/eat.json` 指向 `assets/body/eat-v2/` 和 12 FPS 时间表。
+- [x] promotion 后逐帧比较 source/runtime 解码 RGBA，并固定运行时命名像素摘要。
+- [x] 更新 `motions/eat.json` 指向 `assets/body/eat-v2/` 的无损 WebP 和 12 FPS 时间表。
 - [x] 直接移除被替代的运行时 FRAME1 `eat`，不保留双路径。
 
 完成条件：验证器全部通过，manifest 只读取新的 `eat-v2`。

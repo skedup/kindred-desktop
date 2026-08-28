@@ -211,7 +211,7 @@ visual-sources/kindred-default/eat-v2/
   RENDERED.txt
 
 visual-packs/kindred-default/assets/body/eat-v2/
-  eat-000.png ... eat-083.png
+  eat-000.webp ... eat-083.webp
 
 tools/visual_pipeline/
   eat_contract.py
@@ -226,11 +226,12 @@ tools/visual_pipeline/
 
 ### 7.1 文件与发布
 
-- 84 张 512×768 RGBA PNG；
+- 84 张 512×768 RGBA PNG source 帧；运行时发布为解码像素完全一致的无损 WebP；
 - 12 FPS、总时长 7 秒；
 - 首帧与末帧闭环连续，最终回到同一基准；
-- `RENDERED.txt` 记录获准 source、预览和运行时文件的 SHA-256；
-- promotion 是事务性的；source 与 runtime 帧逐个哈希一致；
+- `RENDERED.txt` 记录获准 source、预览和按 WebP 运行时文件名计算的解码
+  RGBA SHA-256；
+- promotion 是事务性的；source 与 runtime 帧解码后逐像素一致；
 - reduced-motion 继续使用获准的静态首帧。
 
 ### 7.2 静态场景

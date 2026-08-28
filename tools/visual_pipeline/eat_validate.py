@@ -11,6 +11,7 @@ from tools.visual_pipeline.eat_contract import (
     FRAME_COUNT,
     FRAME_DIRECTORY,
     FRAME_PREFIX,
+    RUNTIME_FRAME_SUFFIX,
     RUNTIME_SIZE,
     RUNTIME_TABLE_HORIZONTAL_INSET,
     SOURCE_ROOT,
@@ -26,6 +27,7 @@ from tools.visual_pipeline.eat_promote import (
     validate_approval,
 )
 from tools.visual_pipeline.png_rgba import rgba_pixels, source_rgba, write_rgba
+from tools.visual_pipeline.webp_rgba import webp_rgba
 
 ACTIVE_ARM_RECT = (45, 300, 225, 575)
 BODY_RECT = (145, 100, 390, 560)
@@ -37,6 +39,12 @@ SPOON_PATH_RECT = (75, 250, 290, 560)
 # more than half of the authored prop pixels remain visible for every frame.
 # Pin that large common region instead of treating covered pixels as props.
 MINIMUM_STABLE_PROP_COVERAGE = 0.50
+
+
+def runtime_directory(pack: Path) -> Path:
+    """Resolve the eat runtime directory inside the explicitly selected pack."""
+
+    return pack / RUNTIME_DIRECTORY.relative_to("visual-packs/kindred-default")
 
 
 def _table_gutter_offsets() -> list[int]:
@@ -264,24 +272,31 @@ def validate(
 
     if pack is not None:
         runtime_paths = require_exact_inventory(
-            pack.parent.parent / RUNTIME_DIRECTORY,
+            runtime_directory(pack),
             prefix="eat",
             frame_count=frame_count,
+            suffix=RUNTIME_FRAME_SUFFIX,
         )
-        if ordered_frames_digest(runtime_paths) != approval["runtime_frames_sha256"]:
+        if (
+            ordered_frames_digest(runtime_paths, loader=webp_rgba)
+            != approval["runtime_frames_sha256"]
+        ):
             raise SystemExit("runtime_frames_digest_mismatch")
         for index, (source_path, runtime_path) in enumerate(
             zip(scene_paths, runtime_paths, strict=True)
         ):
-            if source_path.read_bytes() != runtime_path.read_bytes():
-                raise SystemExit(f"runtime_frame_differs_from_source:{index}")
+            if source_rgba(source_path, size=RUNTIME_SIZE) != webp_rgba(
+                runtime_path,
+                size=RUNTIME_SIZE,
+            ):
+                raise SystemExit(f"runtime_frame_pixels_differ_from_source:{index}")
 
         runtime_manifest = json.loads((pack / "motions/eat.json").read_text(encoding="utf-8"))
         if runtime_manifest != motion_payload(frame_count=frame_count):
             raise SystemExit("runtime_schedule_invalid")
         pack_manifest = json.loads((pack / "manifest.json").read_text(encoding="utf-8"))
         reduced = pack_manifest["motions"]["eat"]["reduced_motion"]
-        if reduced["source"] != "assets/body/eat-v2/eat-000.png":
+        if reduced["source"] != "assets/body/eat-v2/eat-000.webp":
             raise SystemExit("runtime_reduced_motion_invalid")
 
     print(

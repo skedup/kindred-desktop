@@ -5,6 +5,7 @@ import pytest
 from tools.visual_pipeline.eat_contract import (
     FPS,
     FRAME_COUNT,
+    RUNTIME_SIZE,
     RUNTIME_TABLE_HORIZONTAL_INSET,
     EatPose,
     inside_table_gutter,
@@ -20,8 +21,10 @@ from tools.visual_pipeline.eat_promote import (
 )
 from tools.visual_pipeline.eat_validate import (
     build_static_prop_mask,
+    runtime_directory,
     validate_static_prop_mask,
 )
+from tools.visual_pipeline.webp_rgba import webp_rgba, write_lossless_webp
 
 
 def test_eat_timeline_has_rest_scoop_lift_sip_return_and_exact_seam() -> None:
@@ -68,9 +71,9 @@ def test_eat_motion_payload_lists_the_exact_runtime_loop() -> None:
         "fps": 12,
         "enter": [],
         "loop": [
-            "assets/body/eat-v2/eat-000.png",
-            "assets/body/eat-v2/eat-001.png",
-            "assets/body/eat-v2/eat-002.png",
+            "assets/body/eat-v2/eat-000.webp",
+            "assets/body/eat-v2/eat-001.webp",
+            "assets/body/eat-v2/eat-002.webp",
         ],
     }
 
@@ -87,6 +90,22 @@ def test_eat_ordered_digest_pins_content_and_runtime_names(tmp_path: Path) -> No
     )
     paths[1].write_bytes(b"changed")
     assert ordered_frames_digest(paths) != source_digest
+
+
+def test_eat_lossless_webp_round_trip_preserves_exact_rgba(tmp_path: Path) -> None:
+    width, height = RUNTIME_SIZE
+    pixels = bytes((index * 17) % 256 for index in range(width * height * 4))
+    destination = tmp_path / "frame.webp"
+
+    write_lossless_webp(destination, size=RUNTIME_SIZE, pixels=pixels)
+
+    assert webp_rgba(destination, size=RUNTIME_SIZE) == pixels
+
+
+def test_eat_runtime_directory_is_resolved_inside_selected_pack(tmp_path: Path) -> None:
+    pack = tmp_path / "custom-pack"
+
+    assert runtime_directory(pack) == pack / "assets/body/eat-v2"
 
 
 def test_eat_static_prop_mask_excludes_occlusion_and_rejects_mutation() -> None:

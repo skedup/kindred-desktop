@@ -11,6 +11,8 @@ RUNTIME_SIZE = (512, 768)
 FPS = 12
 FRAME_COUNT = 84
 DURATION_SECONDS = FRAME_COUNT / FPS
+SOURCE_FRAME_SUFFIX = ".png"
+RUNTIME_FRAME_SUFFIX = ".webp"
 
 # The runtime stage is 304 CSS pixels wide while the status card is 284 pixels
 # wide. A 17-pixel runtime gutter on each side maps to 34 source pixels and

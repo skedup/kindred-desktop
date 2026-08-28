@@ -3,8 +3,8 @@
 状态：母版与动画闸门已通过，EAT-3 已发布
 
 本目录保存早餐桌坐姿 `eat` 的批准母版、确定性分层、Blender rig、
-84 张 source 帧、人工验收预览、批准清单和固定道具验证基准。获准帧已
-promotion 到运行时 visual pack 的 `assets/body/eat-v2/`。
+84 张 PNG source 帧、人工验收预览、批准清单和固定道具验证基准。获准帧已
+以逐像素无损 WebP promotion 到运行时 visual pack 的 `assets/body/eat-v2/`。
 
 ## Production model
 
@@ -18,7 +18,9 @@ promotion 到运行时 visual pack 的 `assets/body/eat-v2/`。
 - `frames/scene-warp-v1/` 是 512×768 RGBA、12 FPS、84 帧、7 秒闭环；
 - `previews/eat-v2-loop-v1.mp4` 和 `previews/eat-v2-contact-sheet-v1.png`
   是已通过动画闸门的正式预览；
-- `RENDERED.txt` 固定母版、分层、预览、source 帧和运行时命名帧的 SHA-256；
+- `RENDERED.txt` 固定母版、分层、预览、source PNG 帧，以及按运行时 WebP
+  文件名计算的解码 RGBA SHA-256；WebP 编码字节可因 libwebp 版本不同而变化，
+  但运行时像素必须与 source 完全一致；
 - `layers/generated/eat-static-props-alpha-v1.png` 与对应 visible mask 用于
   证明椅子、桌面、碗和面包盘的可见像素在完整循环中保持稳定。
 
@@ -50,5 +52,5 @@ python -m tools.visual_pipeline.eat_validate \
 ```
 
 已确认 source 帧数量、尺寸、RGBA、上方透明边角、7 秒时间表、首尾闭环、
-固定道具、人物运动和 source/runtime 一致性。旧 FRAME1 `eat` 已直接移除，
+固定道具、人物运动和 source/runtime 解码像素一致性。旧 FRAME1 `eat` 已直接移除，
 不保留运行时兼容路径或保障式构建。

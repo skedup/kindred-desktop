@@ -52,13 +52,13 @@
     },
     {
       "paths": [
-        "assets/body/eat-v2/*.png",
+        "assets/body/eat-v2/*.webp",
         "motions/eat.json"
       ],
       "source": "reviewed original Kindred character identity and seated breakfast pose, separated into a complete character surface, fixed chair and breakfast-table plates, and a rigid spoon",
       "generator": "OpenAI built-in image generation for the reviewed first-party source pose and localized plate edits; Blender 5.2 LTS deterministic continuous-surface deformation for runtime frames",
       "generated_on": "2026-08-28",
-      "postprocess": "flat chroma-key removal and despill; deterministic fixed-prop, continuous-character, and rigid-spoon separation; bounded below-arm-band sleeve motion; rigid upper-body translation; bowl-contact hand stabilization; byte-stable visible-prop compositing; centered 17px runtime table gutters aligned to the desktop status card; deterministic 512x768 RGBA export; and exact source-to-runtime promotion at 12 FPS",
+      "postprocess": "flat chroma-key removal and despill; deterministic fixed-prop, continuous-character, and rigid-spoon separation; bounded below-arm-band sleeve motion; rigid upper-body translation; bowl-contact hand stabilization; byte-stable visible-prop compositing; centered 17px runtime table gutters aligned to the desktop status card; deterministic 512x768 RGBA source export; lossless WebP runtime encoding with exact decoded RGBA parity; and source-to-runtime promotion at 12 FPS",
       "rights_basis": "created for Kindred from project-owned first-party character artwork and project-controlled pose references; no third-party character or production-frame input"
     },
     {

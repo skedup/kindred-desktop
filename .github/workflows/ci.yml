@@ -37,7 +37,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       - name: Install tools and frontend dependencies
         run: |
-          python -m pip install pytest ruff
+          python -m pip install pillow pytest ruff
           corepack enable
           corepack prepare "pnpm@${PNPM_VERSION}" --activate
           pnpm --dir app install --frozen-lockfile
@@ -47,6 +47,8 @@ jobs:
           ruff check .
           ruff format --check .
           python scripts/validate_visual_pack.py visual-packs/kindred-default
+          python -m tools.visual_pipeline.eat_validate \
+            --source-root visual-sources/kindred-default/eat-v2
       - name: Check desktop frontend
         run: |
           pnpm --dir app test
