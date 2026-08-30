@@ -51,6 +51,19 @@ these Python modules.
   top edge, approval digests, runtime schedule, and source/runtime parity.
 - `eat_promote.py` verifies the pinned approval record, stages all 84 reviewed
   frames, and transactionally installs the runtime loop and 12 FPS manifest.
+- `walk_contract.py` pins the accepted video take, 38-frame gait-cycle trim,
+  12 FPS playback, chroma-key settings, and 512×768 desktop geometry.
+- `walk_video_build.py` normalizes the accepted green-screen image-to-video
+  take, keys and despills its translucent edges, restores the reviewed cool
+  clothing palette, slows one closed gait cycle without optical-flow frames,
+  and writes a centered transparent-character 512×768 review sequence adapted
+  to the desktop window. It has no scenery and remains an offline build that
+  does not promote runtime assets.
+- `walk_validate.py` enforces the accepted 38-frame inventory, transparent
+  corners, centered union bounds, grounded canvas placement, bounded body
+  drift, visible motion, and restrained loop seam.
+- `walk_promote.py` losslessly encodes only those accepted transparent frames
+  as runtime WebP assets and installs the 12 FPS `walk` motion manifest.
 - `png_rgba.py` contains the dependency-free PNG reader shared by validators.
 - `blender_canvas.py` owns the transparent scene, orthographic canvas, mesh,
   material, and texture primitives shared by Blender generators.
@@ -101,4 +114,10 @@ python -m tools.visual_pipeline.draw_layered_validate \
 
 python -m tools.visual_pipeline.eat_validate \
   --source-root visual-sources/kindred-default/eat-v2
+
+python -m tools.visual_pipeline.walk_video_build --repository-root "$PWD"
+
+python -m tools.visual_pipeline.walk_validate --repository-root "$PWD"
+
+python -m tools.visual_pipeline.walk_promote --repository-root "$PWD"
 ```
