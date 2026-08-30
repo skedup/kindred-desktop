@@ -71,6 +71,17 @@
       "generated_on": "2026-08-22",
       "postprocess": "flat chroma-key removal and despill; deterministic static-prop and continuous-character separation; localized shoulder-to-wrist, torso, head, and crossed-leg deformation; rigid brush contact; canvas-facing gaze adjustment; byte-stable prop compositing; deterministic 512x768 RGBA export; and exact source-to-runtime promotion at 12 FPS",
       "rights_basis": "created for Kindred from project-owned first-party character artwork and project-controlled pose references; no third-party character or production-frame input"
+    },
+    {
+      "paths": [
+        "assets/body/walk-v2/*.webp",
+        "motions/walk.json"
+      ],
+      "source": "reviewed original Kindred character identity animated as one complete walking cycle on a removable green plate",
+      "generator": "project-controlled image-to-video generation from first-party Kindred character artwork",
+      "generated_on": "2026-08-30",
+      "postprocess": "closed-cycle trim at 16 FPS; playback retiming to 12 FPS without optical-flow interpolation; chroma-key removal, despill, cool-hue-only clothing grade, uniform portrait-canvas adaptation with lateral transparent-space cropping, transparent 512x768 centering and grounded placement, and lossless WebP runtime encoding with exact decoded RGBA parity",
+      "rights_basis": "created for Kindred from project-owned first-party character artwork; no external scenery or third-party character asset is bundled"
     }
   ]
 }

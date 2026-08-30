@@ -234,7 +234,7 @@
     },
     "walk": {
       "renderer": "frames",
-      "source": "motions/breathe.json",
+      "source": "motions/walk.json",
       "fallback_motion": "neutral",
       "decoration": {
         "renderer": "static",

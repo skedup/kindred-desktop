@@ -290,7 +290,7 @@ describe('SpiritStage', () => {
 
   it('falls back deterministically when an action adapter fails without exposing error details', async () => {
     const { stage, factory, states } = createStage({ crossfadeMs: 0 })
-    factory.failSources.add('motions/breathe.json')
+    factory.failSources.add('motions/walk.json')
 
     stage.onSnapshot(ready(1, 'walk', 1), accepted())
     await stage.whenIdle()
@@ -304,7 +304,7 @@ describe('SpiritStage', () => {
       },
     })
     expect(JSON.stringify(states)).not.toContain('must not leak')
-    expect(JSON.stringify(states)).not.toContain('motions/breathe.json')
+    expect(JSON.stringify(states)).not.toContain('motions/walk.json')
   })
 
   it('also falls back when adapter construction fails before resource loading', async () => {
@@ -319,7 +319,7 @@ describe('SpiritStage', () => {
       diagnostic: { code: 'motion_fallback', error_class: 'FactoryFailure' },
     })
     expect(
-      factory.created.find((adapter) => adapter.descriptor.source === 'motions/breathe.json')
+      factory.created.find((adapter) => adapter.descriptor.source === 'motions/walk.json')
         ?.dispose,
     ).toHaveBeenCalledTimes(1)
     expect(JSON.stringify(stage.state)).not.toContain('factory details')
@@ -327,7 +327,7 @@ describe('SpiritStage', () => {
 
   it('falls back when session activation fails and keeps private details out of state', async () => {
     const { stage, factory } = createStage({ crossfadeMs: 0 })
-    factory.failEnterSources.add('motions/breathe.json')
+    factory.failEnterSources.add('motions/walk.json')
 
     stage.onSnapshot(ready(1, 'walk', 1), accepted())
     await stage.whenIdle()
@@ -346,7 +346,7 @@ describe('SpiritStage', () => {
   it('discards stale adapter loads after a newer motion instance arrives', async () => {
     const { stage, factory } = createStage({ crossfadeMs: 0 })
     const pending = deferred<void>()
-    factory.pendingSources.set('motions/breathe.json', pending)
+    factory.pendingSources.set('motions/walk.json', pending)
 
     stage.onSnapshot(ready(1, 'walk', 1), accepted())
     const staleAdapters = factory.created.slice()
