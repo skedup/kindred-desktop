@@ -126,7 +126,7 @@ The system SHALL provide a read-only visual-state snapshot with `Cache-Control: 
 - **THEN** the renderer preserves any in-memory action and retries with jittered exponential backoff capped at five minutes
 
 ### Requirement: Explicit action-to-motion resolution
-A visual pack SHALL explicitly map action semantics to motion keys. The renderer MUST NOT assume that an action name equals an asset filename, and a pack SHALL be allowed to map multiple semantically distinct actions to the same motion. A resolved motion MAY include small transparent local props or ambience bound to that motion.
+A visual pack SHALL explicitly map action semantics to motion keys. The renderer MUST NOT assume that an action name equals an asset filename, and a pack SHALL be allowed to map multiple semantically distinct actions to the same motion. A resolved motion MAY include a static transparent backdrop behind the body and small transparent local props or ambience above it, all bound to that motion.
 
 #### Scenario: Actions share one physical motion
 - **WHEN** a visual pack maps multiple app-specific actions to a shared `use_phone` motion
@@ -139,6 +139,10 @@ A visual pack SHALL explicitly map action semantics to motion keys. The renderer
 #### Scenario: Action has local decoration
 - **WHEN** an `eat` motion declares a table edge and food as local decoration
 - **THEN** the renderer composes those elements around the transparent character without requiring a complete scene backdrop
+
+#### Scenario: Action has a bounded backdrop
+- **WHEN** a `walk` motion declares a sparse transparent near-facade and fading-skyline backdrop
+- **THEN** the renderer places that static asset behind the animated body and keeps the desktop visible through its transparent region
 
 #### Scenario: Framework settle step is resolved
 - **WHEN** the current action semantic is `settle`

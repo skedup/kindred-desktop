@@ -25,6 +25,16 @@ def test_walk_v2_video_take_uses_one_closed_gait_cycle() -> None:
     assert VIDEO_LOOP_FRAME_COUNT == 38
 
 
+def test_walk_v2_alpha_curve_restores_solid_materials_and_preserves_edges() -> None:
+    normalize = walk_video_build.normalize_alpha_value
+
+    assert normalize(0) == 0
+    assert normalize(8) == 0
+    assert 0 < normalize(9) < normalize(96) < normalize(179) < 255
+    assert normalize(180) == 255
+    assert normalize(255) == 255
+
+
 def test_walk_v2_inventory_requires_the_exact_numbered_png_sequence(tmp_path) -> None:
     expected = [tmp_path / f"motion-{index:03d}.png" for index in range(3)]
     for path in expected:

@@ -30,8 +30,10 @@ _SAFE_SOURCE = re.compile(r"[A-Za-z0-9][A-Za-z0-9._/-]*")
 _PACK_KEYS = frozenset(
     {"schema_version", "id", "identity", "fallback_motion", "action_motions", "motions"}
 )
-_MOTION_KEYS = frozenset({"renderer", "source", "fallback_motion", "decoration", "reduced_motion"})
-_REDUCED_KEYS = frozenset({"renderer", "source", "decoration"})
+_MOTION_KEYS = frozenset(
+    {"renderer", "source", "fallback_motion", "backdrop", "decoration", "reduced_motion"}
+)
+_REDUCED_KEYS = frozenset({"renderer", "source", "backdrop", "decoration"})
 _ASSET_KEYS = frozenset({"renderer", "source"})
 _FRAME_KEYS = frozenset({"schema_version", "fps", "enter", "loop"})
 _FORBIDDEN_SVG_ELEMENTS = frozenset(
@@ -470,6 +472,15 @@ def validate_visual_pack(
         if "fallback_motion" in raw:
             definition["fallback_motion"] = _identifier(raw["fallback_motion"], f"{key}:fallback")
         for container, label in ((raw, key), (reduced, f"{key}:reduced")):
+            backdrop = container.get("backdrop")
+            if backdrop is not None:
+                backdrop_renderer, backdrop_source = _asset(
+                    backdrop, f"{label}:backdrop", static_only=True
+                )
+                if container is raw:
+                    definition["backdrop_renderer"] = backdrop_renderer
+                declared.add(backdrop_source)
+                descriptors.add((backdrop_renderer, backdrop_source))
             decoration = container.get("decoration")
             if decoration is not None:
                 decoration_renderer, decoration_source = _asset(
@@ -486,6 +497,7 @@ def validate_visual_pack(
     if (
         fallback not in definitions
         or definitions[fallback]["renderer"] != "static"
+        or definitions[fallback].get("backdrop_renderer", "static") != "static"
         or definitions[fallback].get("decoration_renderer", "static") != "static"
     ):
         raise VisualPackError("static_fallback_required")

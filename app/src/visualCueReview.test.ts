@@ -60,10 +60,16 @@ describe('bundled visual cue content review', () => {
         await stage.whenIdle()
 
         const images = [...root.querySelectorAll('img')]
-        expect(images).toHaveLength(2)
+        const motion = manifest.motions[manifest.action_motions[action]!]!
+        const expectedBackdrop = reduced ? motion.reduced_motion.backdrop : motion.backdrop
+        expect(images).toHaveLength(expectedBackdrop === undefined ? 2 : 3)
         expect(root.querySelectorAll('audio, video')).toHaveLength(0)
         expect(images.every((image) => image.alt === '' && image.style.opacity === '1')).toBe(true)
         expect(root.textContent).toBe('')
+        const backdrop = images.find((image) => image.dataset.visualLayer === 'backdrop')
+        expect(backdrop?.src).toBe(
+          expectedBackdrop === undefined ? undefined : `asset://${expectedBackdrop.source}`,
+        )
         const cue = images.find((image) => image.dataset.visualLayer === 'decoration')
         expect(cue?.src).toContain(`/decorations/${action.replaceAll('_', '-')}.png`)
         cueSources.get(reduced)?.add(cue?.src ?? '')

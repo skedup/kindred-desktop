@@ -173,6 +173,28 @@ def test_requires_complete_fallback_presentation_to_be_static(tmp_path: Path) ->
         module.validate_visual_pack(pack)
 
 
+def test_accepts_declared_static_backdrops_and_rejects_animated_backdrops(tmp_path: Path) -> None:
+    module = _load_module()
+    pack = _write_pack(tmp_path / "static-backdrop")
+    value = _manifest(pack)
+    value["motions"]["walk"]["backdrop"] = {
+        "renderer": "static",
+        "source": "neutral.svg",
+    }
+    value["motions"]["walk"]["reduced_motion"]["backdrop"] = {
+        "renderer": "static",
+        "source": "neutral.svg",
+    }
+    (pack / "manifest.json").write_text(json.dumps(value), encoding="utf-8")
+    assert module.validate_visual_pack(pack)["motions"] == 2
+
+    value["motions"]["walk"]["backdrop"]["renderer"] = "frames"
+    value["motions"]["walk"]["backdrop"]["source"] = "frames.json"
+    (pack / "manifest.json").write_text(json.dumps(value), encoding="utf-8")
+    with pytest.raises(module.VisualPackError, match="renderer_invalid"):
+        module.validate_visual_pack(pack)
+
+
 def test_rejects_each_resource_ceiling(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     module = _load_module()
     pack = _write_pack(tmp_path / "single-size")

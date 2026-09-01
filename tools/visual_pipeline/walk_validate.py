@@ -14,6 +14,8 @@ from tools.visual_pipeline.walk_contract import (
     VIDEO_CHARACTER_FRAME_DIRECTORY,
     VIDEO_FRAME_PREFIX,
     VIDEO_LOOP_FRAME_COUNT,
+    VIDEO_MIN_OPAQUE_VISIBLE_RATIO,
+    VIDEO_MIN_VISIBLE_ALPHA_MEAN,
     VIDEO_SOURCE_FRAME_SUFFIX,
 )
 
@@ -66,9 +68,28 @@ def validate(source_root: Path) -> None:
     frames = [source_rgba(path, size=RUNTIME_SIZE) for path in paths]
     width, height = RUNTIME_SIZE
     corner_indexes = (3, (width - 1) * 4 + 3, (height - 1) * width * 4 + 3, -1)
+    opaque_ratios: list[float] = []
+    visible_alpha_means: list[float] = []
     for path, pixels in zip(paths, frames, strict=True):
         if any(pixels[index] for index in corner_indexes):
             raise SystemExit(f"walk_frame_corners_not_transparent:{path.name}")
+        visible_alpha = [alpha for alpha in pixels[3::4] if alpha > 8]
+        if not visible_alpha:
+            raise SystemExit(f"walk_frame_empty:{path.name}")
+        opaque_ratio = sum(alpha == 255 for alpha in visible_alpha) / len(visible_alpha)
+        visible_alpha_mean = sum(visible_alpha) / len(visible_alpha)
+        if opaque_ratio < VIDEO_MIN_OPAQUE_VISIBLE_RATIO:
+            raise SystemExit(
+                "walk_character_too_translucent:"
+                f"{path.name}:opaque_ratio={opaque_ratio:.3f}"
+            )
+        if visible_alpha_mean < VIDEO_MIN_VISIBLE_ALPHA_MEAN:
+            raise SystemExit(
+                "walk_character_alpha_too_low:"
+                f"{path.name}:visible_alpha_mean={visible_alpha_mean:.1f}"
+            )
+        opaque_ratios.append(opaque_ratio)
+        visible_alpha_means.append(visible_alpha_mean)
 
     bounds = [_alpha_bounds(frame) for frame in frames]
     union = (
@@ -97,7 +118,9 @@ def validate(source_root: Path) -> None:
     print(
         "WALK_V2_VALID "
         f"frames={len(paths)} size={width}x{height} bbox={union} "
-        f"center_x={center_x:.1f} seam_mean={seam_mean:.3f}"
+        f"center_x={center_x:.1f} seam_mean={seam_mean:.3f} "
+        f"opaque_ratio_min={min(opaque_ratios):.3f} "
+        f"visible_alpha_mean_min={min(visible_alpha_means):.1f}"
     )
 
 

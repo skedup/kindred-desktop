@@ -40,6 +40,7 @@ function simplePack() {
         renderer: 'static',
         source: 'neutral.png',
         fallback_motion: undefined as string | undefined,
+        backdrop: undefined as { renderer: string; source: string } | undefined,
         decoration: undefined as { renderer: string; source: string } | undefined,
         reduced_motion: { renderer: 'static', source: 'neutral.png' },
       },
@@ -47,7 +48,12 @@ function simplePack() {
         renderer: 'frames',
         source: 'shared.json',
         fallback_motion: 'neutral',
-        reduced_motion: { renderer: 'static', source: 'neutral.png' },
+        backdrop: undefined as { renderer: string; source: string } | undefined,
+        reduced_motion: {
+          renderer: 'static',
+          source: 'neutral.png',
+          backdrop: undefined as { renderer: string; source: string } | undefined,
+        },
       },
     },
   }
@@ -124,6 +130,31 @@ describe('visual pack contract', () => {
       source: 'assets/body/neutral.png',
     })
     expect(result.decoration?.source).toBe('assets/decorations/change-outfit.png')
+  })
+
+  it('resolves a static backdrop behind both animated and reduced presentations', () => {
+    const pack = simplePack()
+    pack.motions.shared.backdrop = { renderer: 'static', source: 'night.png' }
+    pack.motions.shared.reduced_motion.backdrop = {
+      renderer: 'static',
+      source: 'night.png',
+    }
+    const manifest = validateVisualPackManifest(pack)
+
+    expect(resolveVisualMotion(manifest, 'walk')).toMatchObject({
+      presentation: { renderer: 'frames', source: 'shared.json' },
+      backdrop: { renderer: 'static', source: 'night.png' },
+    })
+    expect(resolveVisualMotion(manifest, 'walk', { reducedMotion: true })).toMatchObject({
+      presentation: { renderer: 'static', source: 'neutral.png' },
+      backdrop: { renderer: 'static', source: 'night.png' },
+    })
+  })
+
+  it('rejects animated backdrops', () => {
+    const pack = simplePack()
+    pack.motions.shared.backdrop = { renderer: 'frames', source: 'night.json' }
+    expect(() => validateVisualPackManifest(pack)).toThrow(/renderer/)
   })
 
   it('rejects fallback cycles and unsupported identity or audio fields', () => {

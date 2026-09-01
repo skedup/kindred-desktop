@@ -284,6 +284,7 @@ export class SpiritStage implements SnapshotClientObserver {
             motionKey: resolved.motion_key,
             motionInstanceId,
             reducedMotion: this.reducedMotion,
+            ...(resolved.backdrop === undefined ? {} : { backdrop: resolved.backdrop }),
             body: resolved.presentation,
             ...(resolved.decoration === undefined ? {} : { decoration: resolved.decoration }),
           },
