@@ -80,8 +80,7 @@ def validate(source_root: Path) -> None:
         visible_alpha_mean = sum(visible_alpha) / len(visible_alpha)
         if opaque_ratio < VIDEO_MIN_OPAQUE_VISIBLE_RATIO:
             raise SystemExit(
-                "walk_character_too_translucent:"
-                f"{path.name}:opaque_ratio={opaque_ratio:.3f}"
+                f"walk_character_too_translucent:{path.name}:opaque_ratio={opaque_ratio:.3f}"
             )
         if visible_alpha_mean < VIDEO_MIN_VISIBLE_ALPHA_MEAN:
             raise SystemExit(
