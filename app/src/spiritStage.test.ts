@@ -195,7 +195,8 @@ describe('SpiritStage', () => {
     stage.onSnapshot(ready(1, 'walk', 1), accepted())
     await stage.whenIdle()
     expect(stage.state).toMatchObject({ motion_key: 'walk', motion_instance_id: 'tick:1' })
-    expect(factory.created.slice(-2).map((adapter) => [adapter.renderer, adapter.role])).toEqual([
+    expect(factory.created.slice(-3).map((adapter) => [adapter.renderer, adapter.role])).toEqual([
+      ['static', 'backdrop'],
       ['frames', 'body'],
       ['static', 'decoration'],
     ])
@@ -212,7 +213,7 @@ describe('SpiritStage', () => {
 
     stage.onSnapshot(ready(4, 'walk', 3), accepted())
     await stage.whenIdle()
-    expect(factory.created).toHaveLength(createdAfterWalk + 4)
+    expect(factory.created).toHaveLength(createdAfterWalk + 5)
     expect(stage.state).toMatchObject({ motion_key: 'walk', motion_instance_id: 'tick:3' })
     expect(sessions.sessions).toHaveLength(1)
     clock.flush()
@@ -369,11 +370,13 @@ describe('SpiritStage', () => {
     for (const [index, action] of actions.entries()) {
       stage.onSnapshot(ready(index + 1, action, index + 1), accepted())
       await stage.whenIdle()
-      expect(stage.state.adapter_names).toEqual(['static', 'static'])
-      const latest = factory.created.slice(-2)
+      const expectedLayerCount = action === 'walk' ? 3 : 2
+      expect(stage.state.adapter_names).toEqual(Array(expectedLayerCount).fill('static'))
+      const latest = factory.created.slice(-expectedLayerCount)
       const motionKey = manifest.action_motions[action]!
-      expect(latest[0]?.descriptor.source).toBe(manifest.motions[motionKey]!.reduced_motion.source)
-      expect(latest[1]?.descriptor.source).toContain(`/${action.replaceAll('_', '-')}.png`)
+      const reduced = manifest.motions[motionKey]!.reduced_motion
+      expect(latest.at(-2)?.descriptor.source).toBe(reduced.source)
+      expect(latest.at(-1)?.descriptor.source).toContain(`/${action.replaceAll('_', '-')}.png`)
     }
     expect(stage.state.identity).toBe('kindred-resident-v1')
   })

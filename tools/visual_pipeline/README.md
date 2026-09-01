@@ -54,14 +54,15 @@ these Python modules.
 - `walk_contract.py` pins the accepted video take, 38-frame gait-cycle trim,
   12 FPS playback, chroma-key settings, and 512×768 desktop geometry.
 - `walk_video_build.py` normalizes the accepted green-screen image-to-video
-  take, keys and despills its translucent edges, restores the reviewed cool
-  clothing palette, slows one closed gait cycle without optical-flow frames,
-  and writes a centered transparent-character 512×768 review sequence adapted
-  to the desktop window. It has no scenery and remains an offline build that
-  does not promote runtime assets.
+  take, keys and despills its translucent edges, normalizes the keyed matte so
+  solid character materials are opaque while antialiased and sheer edges stay
+  graduated, restores the reviewed cool clothing palette, slows one closed
+  gait cycle without optical-flow frames, and writes a centered transparent-
+  character 512×768 review sequence adapted to the desktop window. It has no
+  scenery and remains an offline build that does not promote runtime assets.
 - `walk_validate.py` enforces the accepted 38-frame inventory, transparent
-  corners, centered union bounds, grounded canvas placement, bounded body
-  drift, visible motion, and restrained loop seam.
+  corners, opaque-character alpha floor, centered union bounds, grounded canvas
+  placement, bounded body drift, visible motion, and restrained loop seam.
 - `walk_promote.py` losslessly encodes only those accepted transparent frames
   as runtime WebP assets and installs the 12 FPS `walk` motion manifest.
 - `png_rgba.py` contains the dependency-free PNG reader shared by validators.

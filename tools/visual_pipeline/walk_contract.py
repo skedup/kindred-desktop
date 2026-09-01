@@ -27,5 +27,14 @@ VIDEO_KEY_COLOR = "0x00e52f"
 VIDEO_KEY_SIMILARITY = 0.24
 VIDEO_KEY_BLEND = 0.10
 VIDEO_DESPILL_MIX = 0.35
+# Chroma-key blending is useful at the silhouette, but the accepted take also
+# carried that soft alpha into solid skin, hair, and dress pixels.  Normalize
+# the matte after scaling: discard key noise at/below the visibility threshold,
+# preserve a graduated antialiased/translucent edge, and make confident
+# foreground pixels fully opaque.
+VIDEO_ALPHA_CLEAR_CUTOFF = 8
+VIDEO_ALPHA_SOLID_CUTOFF = 180
+VIDEO_MIN_OPAQUE_VISIBLE_RATIO = 0.80
+VIDEO_MIN_VISIBLE_ALPHA_MEAN = 240.0
 VIDEO_CHARACTER_SCALE = (1188, 1188)
 VIDEO_CHARACTER_OFFSET = (292, 9)

@@ -5,7 +5,7 @@ import {
   type VisualRendererV1,
 } from './visualPack'
 
-export type VisualLayerRole = 'body' | 'decoration'
+export type VisualLayerRole = 'backdrop' | 'body' | 'decoration'
 
 export interface VisualResourceLoader {
   loadImage(source: string, signal: AbortSignal): Promise<string>
@@ -46,6 +46,7 @@ export interface RendererMotionPlan {
   readonly motionKey: string
   readonly motionInstanceId: string
   readonly reducedMotion: boolean
+  readonly backdrop?: VisualAssetDescriptorV1 & { renderer: 'static' }
   readonly body: VisualAssetDescriptorV1
   readonly decoration?: VisualAssetDescriptorV1
 }
@@ -196,6 +197,7 @@ export class DomVisualSurface implements VisualSurface {
       objectFit: 'contain',
       pointerEvents: 'none',
       userSelect: 'none',
+      zIndex: role === 'backdrop' ? '0' : role === 'body' ? '1' : '2',
     })
     this.root.append(image)
     return new DomVisualLayer(image)
@@ -418,6 +420,9 @@ class DefaultRendererSession implements RendererSession {
     if (this.disposed || signal.aborted) throw abortError()
     const adapters: RendererAdapter[] = []
     try {
+      if (plan.backdrop !== undefined) {
+        adapters.push(this.adapters.create(plan.backdrop, 'backdrop'))
+      }
       adapters.push(this.adapters.create(plan.body, 'body'))
       if (plan.decoration !== undefined) {
         adapters.push(this.adapters.create(plan.decoration, 'decoration'))

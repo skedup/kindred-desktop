@@ -80,8 +80,18 @@
       "source": "reviewed original Kindred character identity animated as one complete walking cycle on a removable green plate",
       "generator": "project-controlled image-to-video generation from first-party Kindred character artwork",
       "generated_on": "2026-08-30",
-      "postprocess": "closed-cycle trim at 16 FPS; playback retiming to 12 FPS without optical-flow interpolation; chroma-key removal, despill, cool-hue-only clothing grade, uniform portrait-canvas adaptation with lateral transparent-space cropping, transparent 512x768 centering and grounded placement, and lossless WebP runtime encoding with exact decoded RGBA parity",
+      "postprocess": "closed-cycle trim at 16 FPS; playback retiming to 12 FPS without optical-flow interpolation; chroma-key removal, despill, matte normalization restoring opaque solid materials while retaining graduated antialiased and sheer edges, cool-hue-only clothing grade, uniform portrait-canvas adaptation with lateral transparent-space cropping, transparent 512x768 centering and grounded placement, and lossless WebP runtime encoding with exact decoded RGBA parity",
       "rights_basis": "created for Kindred from project-owned first-party character artwork; no external scenery or third-party character asset is bundled"
+    },
+    {
+      "paths": [
+        "assets/backgrounds/walk-night-v1.png"
+      ],
+      "source": "original first-party neon-night environment generated for Kindred from project-owned concept artwork",
+      "generator": "OpenAI built-in image generation",
+      "generated_on": "2026-09-01",
+      "postprocess": "character removal, deterministic near-facade and vertically fading distant-skyline alpha masks with all ground removed, layered RGBA composition, and 512x768 Lanczos downscale",
+      "rights_basis": "created for Kindred from project-owned first-party artwork without third-party scenery inputs"
     }
   ]
 }

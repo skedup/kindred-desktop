@@ -266,13 +266,19 @@ describe('renderer adapters', () => {
         motionKey: 'walk',
         motionInstanceId: 'tick:1',
         reducedMotion: false,
+        backdrop: { renderer: 'static', source: 'night.png' },
         body: { renderer: 'frames', source: 'motion.json' },
         decoration: { renderer: 'static', source: 'walk.png' },
       },
       signal,
     )
     session.activate(walk, { durationMs: 120 })
-    expect(walk.rendererNames).toEqual(['frames', 'static'])
+    expect(walk.rendererNames).toEqual(['static', 'frames', 'static'])
+    expect(surface.layers.slice(0, 3).map(({ role }) => role)).toEqual([
+      'backdrop',
+      'body',
+      'decoration',
+    ])
     expect(animationClock.pending).toBe(1)
 
     session.suspend()
@@ -293,7 +299,7 @@ describe('renderer adapters', () => {
     expect(settle.rendererNames).toEqual(['static'])
     expect(surface.layers[0]?.layer.disposed).toBe(false)
     expect(surface.layers[1]?.layer.disposed).toBe(false)
-    expect(surface.layers[2]?.layer.opacities).toEqual([
+    expect(surface.layers[3]?.layer.opacities).toEqual([
       [0, 0],
       [1, 120],
     ])
@@ -301,10 +307,11 @@ describe('renderer adapters', () => {
     transitionClock.flush()
     expect(surface.layers[0]?.layer.disposed).toBe(true)
     expect(surface.layers[1]?.layer.disposed).toBe(true)
-    expect(surface.layers[2]?.layer.disposed).toBe(false)
+    expect(surface.layers[2]?.layer.disposed).toBe(true)
+    expect(surface.layers[3]?.layer.disposed).toBe(false)
 
     session.dispose()
-    expect(surface.layers[2]?.layer.disposed).toBe(true)
+    expect(surface.layers[3]?.layer.disposed).toBe(true)
     expect(animationClock.pending).toBe(0)
   })
 
@@ -401,17 +408,25 @@ describe('renderer adapters', () => {
     expect(resources.loadFrameManifest).not.toHaveBeenCalled()
   })
 
-  it('renders DOM layers as silent, non-text, pointer-transparent images', () => {
+  it('renders DOM layers as ordered, silent, non-text, pointer-transparent images', () => {
     const root = document.createElement('div')
-    const layer = new DomVisualSurface(root).createLayer('decoration')
-    layer.setImage('asset://cue.png')
-    layer.setOpacity(1, 100)
+    const surface = new DomVisualSurface(root)
+    surface.createLayer('backdrop').setImage('asset://night.png')
+    surface.createLayer('body').setImage('asset://body.png')
+    const decoration = surface.createLayer('decoration')
+    decoration.setImage('asset://cue.png')
+    decoration.setOpacity(1, 100)
 
-    const image = root.querySelector('img')
-    expect(image?.getAttribute('alt')).toBe('')
-    expect(image?.getAttribute('aria-hidden')).toBe('true')
-    expect(image?.dataset.visualLayer).toBe('decoration')
-    expect(image?.style.pointerEvents).toBe('none')
+    const images = [...root.querySelectorAll('img')]
+    expect(images.map((image) => image.dataset.visualLayer)).toEqual([
+      'backdrop',
+      'body',
+      'decoration',
+    ])
+    expect(images.map((image) => image.style.zIndex)).toEqual(['0', '1', '2'])
+    expect(images.every((image) => image.getAttribute('alt') === '')).toBe(true)
+    expect(images.every((image) => image.getAttribute('aria-hidden') === 'true')).toBe(true)
+    expect(images.every((image) => image.style.pointerEvents === 'none')).toBe(true)
     expect(root.textContent).toBe('')
   })
 })

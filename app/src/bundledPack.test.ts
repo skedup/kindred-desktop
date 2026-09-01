@@ -11,11 +11,15 @@ function declaredAssets(): VisualAssetDescriptorV1[] {
   const { manifest } = resolveBundledVisualPack()
   return Object.values(manifest.motions).flatMap((motion) => [
     motion,
+    ...(motion.backdrop === undefined ? [] : [motion.backdrop]),
     ...(motion.decoration === undefined ? [] : [motion.decoration]),
     ...(motion.reduced_motion === undefined
       ? []
       : [
           motion.reduced_motion,
+          ...(motion.reduced_motion.backdrop === undefined
+            ? []
+            : [motion.reduced_motion.backdrop]),
           ...(motion.reduced_motion.decoration === undefined
             ? []
             : [motion.reduced_motion.decoration]),

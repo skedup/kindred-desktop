@@ -236,13 +236,21 @@
       "renderer": "frames",
       "source": "motions/walk.json",
       "fallback_motion": "neutral",
+      "backdrop": {
+        "renderer": "static",
+        "source": "assets/backgrounds/walk-night-v1.png"
+      },
       "decoration": {
         "renderer": "static",
         "source": "assets/decorations/walk.png"
       },
       "reduced_motion": {
         "renderer": "static",
-        "source": "assets/body/neutral.png",
+        "source": "assets/body/walk-v2/walk-000.webp",
+        "backdrop": {
+          "renderer": "static",
+          "source": "assets/backgrounds/walk-night-v1.png"
+        },
         "decoration": {
           "renderer": "static",
           "source": "assets/decorations/walk.png"

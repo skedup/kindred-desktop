@@ -183,6 +183,9 @@ motions:
   walk:
     renderer: frames
     source: walk/manifest.json
+    backdrop:
+      renderer: static
+      source: walk/night-street.png
     playback: {enter: once, loop: repeat}
   eat:
     renderer: frames
@@ -201,7 +204,7 @@ motions:
     source: settle/reflect.json
 ```
 
-All asset paths are pack-relative, validated against traversal and symlink escape, and loaded only from packaged desktop resources. Runtime network URLs are forbidden. The V1 pack is limited to 2,048 files, 256 MiB total unpacked bytes, 16 MiB per file, 4,096 x 4,096 pixels per raster, 600 frames per motion, and 30 frames per second. Every pack declares a neutral static fallback, and every non-static motion may declare a closer fallback before reaching neutral. The manifest format may support multiple actions resolving to one motion for future packs, but V1 loads exactly one bundled `kindred-default` pack and exposes no selection, installation, discovery, or third-party pack path. The bundled pack gives every currently built-in action and `settle` a dedicated, visually distinguishable motion/decor composition and must not reach neutral during normal operation. Lower-level rigs, poses, cycles, and frame material may still be reused. A motion may also declare small transparent local props or ambience such as a table edge, food, rain, footsteps, or a pillow. These elements occupy a local stage around the character; the desktop remains transparent rather than becoming a complete room or world scene.
+All asset paths are pack-relative, validated against traversal and symlink escape, and loaded only from packaged desktop resources. Runtime network URLs are forbidden. The V1 pack is limited to 2,048 files, 256 MiB total unpacked bytes, 16 MiB per file, 4,096 x 4,096 pixels per raster, 600 frames per motion, and 30 frames per second. Every pack declares a neutral static fallback, and every non-static motion may declare a closer fallback before reaching neutral. The manifest format may support multiple actions resolving to one motion for future packs, but V1 loads exactly one bundled `kindred-default` pack and exposes no selection, installation, discovery, or third-party pack path. The bundled pack gives every currently built-in action and `settle` a dedicated, visually distinguishable motion/decor composition and must not reach neutral during normal operation. Lower-level rigs, poses, cycles, and frame material may still be reused. A motion may declare one static transparent backdrop behind the body plus small transparent local props or ambience above it, such as a table edge, food, rain, footsteps, or a pillow. Backdrops remain bounded to the compact stage and preserve substantial transparency rather than turning the companion into a complete room or poster. Keeping a backdrop static also prevents scenery drift and avoids duplicating it into every body frame.
 
 `settle` resolves to a quiet closing or reflective loop, distinct from neutral. Because latest committed state remains authoritative, this loop may continue indefinitely until a later tick replaces it; the renderer does not invent an automatic transition to idle.
 
@@ -213,12 +216,12 @@ Embedding renderer type or asset path in each atomic-action manifest was rejecte
 
 ### 6. Implement one renderer state machine with pluggable adapters
 
-`SpiritStage` owns connection health, motion/decor resolution, transition identity, accessibility settings, and adapter lifecycle. Format adapters implement a narrow lifecycle such as `load`, `enter`, `suspend`, and `dispose`; a later layered-visual change may add context updates.
+`SpiritStage` owns connection health, backdrop/body/decoration resolution, transition identity, accessibility settings, and adapter lifecycle. Format adapters implement a narrow lifecycle such as `load`, `enter`, `suspend`, and `dispose`; a later layered-visual change may add context updates.
 
 On a new revision:
 
-1. If `motion_instance_id` is unchanged, keep the current action motion and local decoration running without replaying enter motion.
-2. If it changed, resolve the action and its optional local decoration through the pack, cross-fade from the previous adapter, play optional enter motion once, then loop.
+1. If `motion_instance_id` is unchanged, keep the current action motion and its backdrop/local decoration running without replaying enter motion.
+2. If it changed, resolve the action and its optional static backdrop and local decoration through the pack, cross-fade from the previous adapter, play optional enter motion once, then loop.
 3. If loading or playback fails, walk the declared fallback chain and finally render the bundled neutral static asset.
 
 Connection interruption does not run this transition algorithm and does not replace the current adapter. It only changes the orthogonal connection indicator and retry behavior.

@@ -22,6 +22,8 @@ from tools.visual_pipeline.walk_contract import (
     RUNTIME_SIZE,
     SOURCE_ROOT,
     SOURCE_SIZE,
+    VIDEO_ALPHA_CLEAR_CUTOFF,
+    VIDEO_ALPHA_SOLID_CUTOFF,
     VIDEO_CHARACTER_FRAME_DIRECTORY,
     VIDEO_CHARACTER_OFFSET,
     VIDEO_CHARACTER_SCALE,
@@ -146,6 +148,25 @@ def _grade_character_frames(directory: Path) -> None:
         output = Image.composite(graded, rgb, _cool_hue_mask(image)).convert("RGBA")
         output.putalpha(image.getchannel("A"))
         output.save(path, compress_level=9)
+
+
+def normalize_alpha_value(value: int) -> int:
+    """Restore solid foreground opacity while retaining a soft silhouette."""
+
+    if value <= VIDEO_ALPHA_CLEAR_CUTOFF:
+        return 0
+    if value >= VIDEO_ALPHA_SOLID_CUTOFF:
+        return 255
+    alpha_span = VIDEO_ALPHA_SOLID_CUTOFF - VIDEO_ALPHA_CLEAR_CUTOFF
+    return round((value - VIDEO_ALPHA_CLEAR_CUTOFF) * 255 / alpha_span)
+
+
+def _normalize_character_alpha(directory: Path) -> None:
+    alpha_curve = [normalize_alpha_value(value) for value in range(256)]
+    for path in sorted(directory.glob(f"{VIDEO_FRAME_PREFIX}-*.png")):
+        image = Image.open(path).convert("RGBA")
+        image.putalpha(image.getchannel("A").point(alpha_curve))
+        image.save(path, compress_level=9)
 
 
 def _render_character(ffmpeg: str, source: Path, output: Path) -> None:
@@ -299,6 +320,7 @@ def build(repository: Path, source_video: Path | None, ffmpeg_name: str, ffprobe
     preview_root.mkdir(parents=True, exist_ok=True)
 
     _render_character(ffmpeg, source, character_frames)
+    _normalize_character_alpha(character_frames)
     _grade_character_frames(character_frames)
     _validate_character_frames(character_frames)
     character_preview = preview_root / CHARACTER_PREVIEW

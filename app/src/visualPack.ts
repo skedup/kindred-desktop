@@ -8,11 +8,13 @@ export interface VisualAssetDescriptorV1 {
 export interface VisualReducedMotionV1 {
   renderer: 'static'
   source: string
+  backdrop?: VisualAssetDescriptorV1 & { renderer: 'static' }
   decoration?: VisualAssetDescriptorV1 & { renderer: 'static' }
 }
 
 export interface VisualMotionV1 extends VisualAssetDescriptorV1 {
   fallback_motion?: string
+  backdrop?: VisualAssetDescriptorV1 & { renderer: 'static' }
   decoration?: VisualAssetDescriptorV1
   reduced_motion: VisualReducedMotionV1
 }
@@ -43,6 +45,7 @@ export interface ResolvedVisualMotionV1 {
   requested_action: string | null
   motion_key: string
   presentation: VisualAssetDescriptorV1
+  backdrop?: VisualAssetDescriptorV1 & { renderer: 'static' }
   decoration?: VisualAssetDescriptorV1
   used_fallback: boolean
   fallback_chain: readonly string[]
@@ -151,12 +154,16 @@ function assetDescriptor(
 
 function reducedMotion(value: unknown, label: string): VisualReducedMotionV1 {
   const raw = record(value, label)
-  exactKeys(raw, ['renderer', 'source', 'decoration'], label)
+  exactKeys(raw, ['renderer', 'source', 'backdrop', 'decoration'], label)
   const body = assetDescriptor(
     { renderer: raw.renderer, source: raw.source },
     label,
     { staticOnly: true },
   )
+  const backdrop =
+    raw.backdrop === undefined
+      ? undefined
+      : assetDescriptor(raw.backdrop, `${label}.backdrop`, { staticOnly: true })
   const decoration =
     raw.decoration === undefined
       ? undefined
@@ -164,6 +171,9 @@ function reducedMotion(value: unknown, label: string): VisualReducedMotionV1 {
   return {
     renderer: 'static',
     source: body.source,
+    ...(backdrop === undefined
+      ? {}
+      : { backdrop: { renderer: 'static' as const, source: backdrop.source } }),
     ...(decoration === undefined
       ? {}
       : { decoration: { renderer: 'static', source: decoration.source } }),
@@ -174,7 +184,7 @@ function motion(value: unknown, label: string): VisualMotionV1 {
   const raw = record(value, label)
   exactKeys(
     raw,
-    ['renderer', 'source', 'fallback_motion', 'decoration', 'reduced_motion'],
+    ['renderer', 'source', 'fallback_motion', 'backdrop', 'decoration', 'reduced_motion'],
     label,
   )
   const body = assetDescriptor({ renderer: raw.renderer, source: raw.source }, label)
@@ -182,6 +192,10 @@ function motion(value: unknown, label: string): VisualMotionV1 {
     raw.fallback_motion === undefined
       ? undefined
       : identifier(raw.fallback_motion, `${label}.fallback_motion`)
+  const backdrop =
+    raw.backdrop === undefined
+      ? undefined
+      : assetDescriptor(raw.backdrop, `${label}.backdrop`, { staticOnly: true })
   const decoration =
     raw.decoration === undefined
       ? undefined
@@ -189,6 +203,9 @@ function motion(value: unknown, label: string): VisualMotionV1 {
   return {
     ...body,
     ...(fallbackMotion === undefined ? {} : { fallback_motion: fallbackMotion }),
+    ...(backdrop === undefined
+      ? {}
+      : { backdrop: { renderer: 'static' as const, source: backdrop.source } }),
     ...(decoration === undefined ? {} : { decoration }),
     reduced_motion: reducedMotion(raw.reduced_motion, `${label}.reduced_motion`),
   }
@@ -246,6 +263,7 @@ export function validateVisualPackManifest(value: unknown): VisualPackManifestV1
   if (
     fallback === undefined ||
     fallback.renderer !== 'static' ||
+    (fallback.backdrop !== undefined && fallback.backdrop.renderer !== 'static') ||
     (fallback.decoration !== undefined && fallback.decoration.renderer !== 'static')
   ) {
     throw new VisualPackValidationError('visual pack fallback must be a declared static motion')
@@ -297,11 +315,18 @@ export function validateFrameManifest(value: unknown): FrameManifestV1 {
 function presentation(
   motionDefinition: VisualMotionV1,
   reduced: boolean,
-): { body: VisualAssetDescriptorV1; decoration?: VisualAssetDescriptorV1 } {
+): {
+  body: VisualAssetDescriptorV1
+  backdrop?: VisualAssetDescriptorV1 & { renderer: 'static' }
+  decoration?: VisualAssetDescriptorV1
+} {
   if (reduced) {
     const reducedDefinition = motionDefinition.reduced_motion
     return {
       body: { renderer: 'static', source: reducedDefinition.source },
+      ...(reducedDefinition.backdrop === undefined
+        ? {}
+        : { backdrop: reducedDefinition.backdrop }),
       ...(reducedDefinition.decoration === undefined
         ? {}
         : { decoration: reducedDefinition.decoration }),
@@ -309,6 +334,7 @@ function presentation(
   }
   return {
     body: { renderer: motionDefinition.renderer, source: motionDefinition.source },
+    ...(motionDefinition.backdrop === undefined ? {} : { backdrop: motionDefinition.backdrop }),
     ...(motionDefinition.decoration === undefined
       ? {}
       : { decoration: motionDefinition.decoration }),
@@ -342,12 +368,14 @@ export function resolveVisualMotion(
     const selected = presentation(current, options.reducedMotion ?? false)
     const rendererReady =
       availableRenderers.has(selected.body.renderer) &&
+      (selected.backdrop === undefined || availableRenderers.has(selected.backdrop.renderer)) &&
       (selected.decoration === undefined || availableRenderers.has(selected.decoration.renderer))
     if (!unavailableMotions.has(currentKey) && rendererReady) {
       return {
         requested_action: action,
         motion_key: currentKey,
         presentation: selected.body,
+        ...(selected.backdrop === undefined ? {} : { backdrop: selected.backdrop }),
         ...(selected.decoration === undefined ? {} : { decoration: selected.decoration }),
         used_fallback: currentKey !== initial || mapped === undefined,
         fallback_chain: chain,
@@ -373,6 +401,8 @@ export function presentationSignature(
   return [
     resolved.presentation.renderer,
     resolved.presentation.source,
+    resolved.backdrop?.renderer ?? '',
+    resolved.backdrop?.source ?? '',
     resolved.decoration?.renderer ?? '',
     resolved.decoration?.source ?? '',
   ].join('|')
