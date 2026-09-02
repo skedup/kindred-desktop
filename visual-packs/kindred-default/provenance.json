@@ -41,7 +41,6 @@
       "paths": [
         "assets/body/frame1/settle/*.png",
         "assets/body/frame1/sleep/*.png",
-        "motions/settle.json",
         "motions/sleep.json"
       ],
       "source": "controlled action key poses derived from Kindred first-party artwork without third-party image inputs",
@@ -49,6 +48,17 @@
       "generated_on": "2026-08-20",
       "postprocess": "FFmpeg chroma-key, despill, and neutral-locked localized eye compositing; fixed-canvas Blender deformation; 512x768 RGBA PNG export; and frame-by-frame visual QA",
       "rights_basis": "created for Kindred from project-owned first-party character artwork and released under the pack public license"
+    },
+    {
+      "paths": [
+        "assets/body/settle-v2/*.webp",
+        "motions/settle.json"
+      ],
+      "source": "reviewed original Kindred character identity animated as a complete standing butterfly encounter on a removable green plate, followed by the existing first-party breathing loop",
+      "generator": "project-controlled image-to-video generation from first-party Kindred character artwork; Blender 5.2 LTS deterministic 2D mesh warp for the retained breathing frames",
+      "generated_on": "2026-09-02",
+      "postprocess": "12 FPS normalization; chroma-key removal and despill; alpha normalization restoring opaque solid materials while retaining antialiased and sheer edges; uniform portrait-canvas adaptation and fixed 512x768 crop; lossless WebP runtime encoding with exact decoded RGBA parity; and randomized 12-28 second replay scheduling aligned to the breathing-loop boundary",
+      "rights_basis": "created for Kindred from project-owned first-party character artwork and project-controlled pose references; no third-party character or production-frame input"
     },
     {
       "paths": [

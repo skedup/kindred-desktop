@@ -265,6 +265,8 @@ export class FrameAnimationAdapter extends BaseImageAdapter {
   private suspended = false
   private frameHandle: number | null = null
   private lastFrameAt = 0
+  private replayNotBeforeAt: number | null = null
+  private suspendedAt: number | null = null
 
   constructor(
     private readonly descriptor: VisualAssetDescriptorV1 & { renderer: 'frames' },
@@ -272,6 +274,7 @@ export class FrameAnimationAdapter extends BaseImageAdapter {
     surface: VisualSurface,
     role: VisualLayerRole,
     private readonly clock: AnimationFrameClock = DEFAULT_ANIMATION_CLOCK,
+    private readonly random: () => number = Math.random,
   ) {
     super(surface, role)
   }
@@ -298,6 +301,8 @@ export class FrameAnimationAdapter extends BaseImageAdapter {
     }
     this.cancelFrame()
     this.position = 0
+    this.replayNotBeforeAt = null
+    this.suspendedAt = null
     this.entered = true
     this.showCurrentFrame()
     this.lastFrameAt = this.clock.now()
@@ -308,9 +313,15 @@ export class FrameAnimationAdapter extends BaseImageAdapter {
     if (this.suspended === suspended || this.disposed) return
     this.suspended = suspended
     if (suspended) {
+      this.suspendedAt = this.clock.now()
       this.cancelFrame()
     } else if (this.entered) {
-      this.lastFrameAt = this.clock.now()
+      const now = this.clock.now()
+      if (this.suspendedAt !== null && this.replayNotBeforeAt !== null) {
+        this.replayNotBeforeAt += Math.max(0, now - this.suspendedAt)
+      }
+      this.suspendedAt = null
+      this.lastFrameAt = now
       this.scheduleFrame()
     }
   }
@@ -343,11 +354,38 @@ export class FrameAnimationAdapter extends BaseImageAdapter {
     const elapsed = Math.max(0, timestamp - this.lastFrameAt)
     const steps = Math.floor(elapsed / duration)
     if (steps > 0) {
+      const previousPosition = this.position
+      const previousFrameAt = this.lastFrameAt
       this.position += steps
       this.lastFrameAt += steps * duration
+      if (
+        manifest.replay_interval !== undefined &&
+        previousPosition < manifest.enter.length &&
+        this.position >= manifest.enter.length
+      ) {
+        const loopEnteredAt =
+          previousFrameAt + (manifest.enter.length - previousPosition) * duration
+        this.replayNotBeforeAt = loopEnteredAt + this.randomReplayInterval()
+      }
+      if (
+        this.replayNotBeforeAt !== null &&
+        timestamp >= this.replayNotBeforeAt &&
+        (this.position - manifest.enter.length) % manifest.loop.length === 0
+      ) {
+        this.position = 0
+        this.lastFrameAt = timestamp
+        this.replayNotBeforeAt = null
+      }
       this.showCurrentFrame()
     }
     this.scheduleFrame()
+  }
+
+  private randomReplayInterval(): number {
+    const interval = this.manifest?.replay_interval
+    if (interval === undefined) return 0
+    const sample = Math.min(1, Math.max(0, this.random()))
+    return interval.min_ms + Math.round(sample * (interval.max_ms - interval.min_ms))
   }
 
   private showCurrentFrame(): void {

@@ -35,7 +35,8 @@ _MOTION_KEYS = frozenset(
 )
 _REDUCED_KEYS = frozenset({"renderer", "source", "backdrop", "decoration"})
 _ASSET_KEYS = frozenset({"renderer", "source"})
-_FRAME_KEYS = frozenset({"schema_version", "fps", "enter", "loop"})
+_FRAME_KEYS = frozenset({"schema_version", "fps", "enter", "loop", "replay_interval"})
+_REPLAY_INTERVAL_KEYS = frozenset({"min_ms", "max_ms"})
 _FORBIDDEN_SVG_ELEMENTS = frozenset(
     {"script", "style", "foreignObject", "animate", "animateMotion", "animateTransform", "set"}
 )
@@ -386,6 +387,20 @@ def _validate_frame_manifest(path: Path) -> set[str]:
         raise VisualPackError(f"frame_sequence_invalid:{path.name}")
     if len(enter) + len(loop) > MAX_FRAMES:
         raise VisualPackError(f"frame_limit_exceeded:{path.name}")
+    replay = value.get("replay_interval")
+    if replay is not None:
+        if not isinstance(replay, dict):
+            raise VisualPackError(f"replay_interval_invalid:{path.name}")
+        _exact_keys(replay, _REPLAY_INTERVAL_KEYS, f"{path.name}:replay_interval")
+        minimum = replay.get("min_ms")
+        maximum = replay.get("max_ms")
+        if (
+            type(minimum) is not int
+            or type(maximum) is not int
+            or not 1_000 <= minimum <= maximum <= 300_000
+            or not enter
+        ):
+            raise VisualPackError(f"replay_interval_invalid:{path.name}")
     return {_local_source(source, f"{path.name}:frame") for source in [*enter, *loop]}
 
 

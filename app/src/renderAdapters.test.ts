@@ -212,6 +212,78 @@ describe('renderer adapters', () => {
     expect(layer?.disposed).toBe(true)
   })
 
+  it('replays enter after a random idle interval at a loop boundary', async () => {
+    const surface = new FakeSurface()
+    const resources = loader()
+    resources.loadFrameManifest = vi.fn(async () => ({
+      schema_version: 1,
+      fps: 4,
+      enter: ['event-a.png', 'event-b.png'],
+      loop: ['idle-a.png', 'idle-b.png'],
+      replay_interval: { min_ms: 1_000, max_ms: 1_000 },
+    }))
+    const clock = new FakeAnimationClock()
+    const adapter = new FrameAnimationAdapter(
+      { renderer: 'frames', source: 'motion.json' },
+      resources,
+      surface,
+      'body',
+      clock,
+      () => 0.5,
+    )
+
+    await adapter.load(new AbortController().signal)
+    adapter.enter()
+    const layer = surface.layers[0]?.layer
+    for (let index = 0; index < 6; index += 1) clock.step(250)
+
+    expect(layer?.images).toEqual([
+      'asset://event-a.png',
+      'asset://event-b.png',
+      'asset://idle-a.png',
+      'asset://idle-b.png',
+      'asset://idle-a.png',
+      'asset://idle-b.png',
+      'asset://event-a.png',
+    ])
+    adapter.dispose()
+  })
+
+  it('does not consume a pending replay interval while suspended', async () => {
+    const surface = new FakeSurface()
+    const resources = loader()
+    resources.loadFrameManifest = vi.fn(async () => ({
+      schema_version: 1,
+      fps: 4,
+      enter: ['event.png'],
+      loop: ['idle-a.png', 'idle-b.png'],
+      replay_interval: { min_ms: 1_000, max_ms: 1_000 },
+    }))
+    const clock = new FakeAnimationClock()
+    const adapter = new FrameAnimationAdapter(
+      { renderer: 'frames', source: 'motion.json' },
+      resources,
+      surface,
+      'body',
+      clock,
+      () => 0,
+    )
+
+    await adapter.load(new AbortController().signal)
+    adapter.enter()
+    clock.step(250)
+    adapter.setSuspended(true)
+    clock.step(10_000)
+    adapter.setSuspended(false)
+    clock.step(750)
+    expect(
+      surface.layers[0]?.layer.images.filter((source) => source === 'asset://event.png'),
+    ).toHaveLength(1)
+    clock.step(250)
+    expect(surface.layers[0]?.layer.images.at(-1)).toBe('asset://event.png')
+    adapter.dispose()
+  })
+
   it('rejects invalid frame manifests before entering playback', async () => {
     const surface = new FakeSurface()
     const resources = loader()

@@ -65,6 +65,18 @@ these Python modules.
   placement, bounded body drift, visible motion, and restrained loop seam.
 - `walk_promote.py` losslessly encodes only those accepted transparent frames
   as runtime WebP assets and installs the 12 FPS `walk` motion manifest.
+- `settle_contract.py` pins the accepted butterfly-event take, chroma-key and
+  desktop geometry, 12 FPS playback, slow idle schedule, and 12–28 second
+  random replay window.
+- `settle_video_build.py` keys and despills the accepted green-screen take,
+  normalizes solid and sheer alpha, adapts it to the 512×768 desktop canvas,
+  and writes review frames, a dark-matte preview, and a contact sheet.
+- `settle_validate.py` enforces exact event inventory, transparent corners,
+  opaque-character alpha, centered and grounded placement, visible motion,
+  and a restrained first/last event seam.
+- `settle_promote.py` losslessly encodes the reviewed event as WebP and installs
+  a manifest that returns to the existing breathing loop between randomly
+  scheduled butterfly encounters.
 - `png_rgba.py` contains the dependency-free PNG reader shared by validators.
 - `blender_canvas.py` owns the transparent scene, orthographic canvas, mesh,
   material, and texture primitives shared by Blender generators.
@@ -121,4 +133,10 @@ python -m tools.visual_pipeline.walk_video_build --repository-root "$PWD"
 python -m tools.visual_pipeline.walk_validate --repository-root "$PWD"
 
 python -m tools.visual_pipeline.walk_promote --repository-root "$PWD"
+
+python -m tools.visual_pipeline.settle_video_build --repository-root "$PWD"
+
+python -m tools.visual_pipeline.settle_validate --repository-root "$PWD"
+
+python -m tools.visual_pipeline.settle_promote --repository-root "$PWD"
 ```
