@@ -33,6 +33,12 @@ export interface FrameManifestV1 {
   fps: number
   enter: readonly string[]
   loop: readonly string[]
+  replay_interval?: FrameReplayIntervalV1
+}
+
+export interface FrameReplayIntervalV1 {
+  min_ms: number
+  max_ms: number
 }
 
 export type VisualResolutionDiagnostic =
@@ -287,7 +293,7 @@ export function validateVisualPackManifest(value: unknown): VisualPackManifestV1
 
 export function validateFrameManifest(value: unknown): FrameManifestV1 {
   const raw = record(value, 'frame manifest')
-  exactKeys(raw, ['schema_version', 'fps', 'enter', 'loop'], 'frame manifest')
+  exactKeys(raw, ['schema_version', 'fps', 'enter', 'loop', 'replay_interval'], 'frame manifest')
   if (raw.schema_version !== 1) {
     throw new VisualPackValidationError('frame manifest schema_version is unsupported')
   }
@@ -309,7 +315,29 @@ export function validateFrameManifest(value: unknown): FrameManifestV1 {
   if (enter.length + loop.length > MAX_FRAME_COUNT) {
     throw new VisualPackValidationError('frame manifest exceeds the frame limit')
   }
-  return { schema_version: 1, fps, enter, loop }
+  let replayInterval: FrameReplayIntervalV1 | undefined
+  if (raw.replay_interval !== undefined) {
+    const replay = record(raw.replay_interval, 'frame manifest replay_interval')
+    exactKeys(replay, ['min_ms', 'max_ms'], 'frame manifest replay_interval')
+    const minMs = integer(replay.min_ms, 'frame manifest replay_interval.min_ms', 1_000, 300_000)
+    const maxMs = integer(replay.max_ms, 'frame manifest replay_interval.max_ms', 1_000, 300_000)
+    if (maxMs < minMs) {
+      throw new VisualPackValidationError(
+        'frame manifest replay_interval.max_ms must not be smaller than min_ms',
+      )
+    }
+    if (enter.length === 0) {
+      throw new VisualPackValidationError('frame manifest replay_interval requires enter frames')
+    }
+    replayInterval = { min_ms: minMs, max_ms: maxMs }
+  }
+  return {
+    schema_version: 1,
+    fps,
+    enter,
+    loop,
+    ...(replayInterval === undefined ? {} : { replay_interval: replayInterval }),
+  }
 }
 
 function presentation(

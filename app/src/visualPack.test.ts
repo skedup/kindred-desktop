@@ -206,4 +206,41 @@ describe('visual pack contract', () => {
       }),
     ).toThrow(/frame limit/)
   })
+
+  it('accepts bounded enter replay intervals and rejects incomplete schedules', () => {
+    expect(
+      validateFrameManifest({
+        schema_version: 1,
+        fps: 12,
+        enter: ['event.png'],
+        loop: ['idle.png'],
+        replay_interval: { min_ms: 12_000, max_ms: 28_000 },
+      }),
+    ).toEqual({
+      schema_version: 1,
+      fps: 12,
+      enter: ['event.png'],
+      loop: ['idle.png'],
+      replay_interval: { min_ms: 12_000, max_ms: 28_000 },
+    })
+
+    expect(() =>
+      validateFrameManifest({
+        schema_version: 1,
+        fps: 12,
+        enter: [],
+        loop: ['idle.png'],
+        replay_interval: { min_ms: 12_000, max_ms: 28_000 },
+      }),
+    ).toThrow(/requires enter/)
+    expect(() =>
+      validateFrameManifest({
+        schema_version: 1,
+        fps: 12,
+        enter: ['event.png'],
+        loop: ['idle.png'],
+        replay_interval: { min_ms: 28_000, max_ms: 12_000 },
+      }),
+    ).toThrow(/must not be smaller/)
+  })
 })
